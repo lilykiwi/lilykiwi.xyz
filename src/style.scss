@@ -1,56 +1,94 @@
+// Configuration
+@import "../node_modules/bootstrap/scss/functions";
+
+
+$primary: #987ec0;
+$secondary: #7e90c0;
+$success: #20ad6b;
+$info: #9ec5fe;
+$warning: #ffcd39;
+$danger: #e35d6a;
+$light: #ffffff;
+$dark: #18191b;
+
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+
+$body-bg-dark: #18191b;
+$body-secondary-bg-dark: #252729;
+$body-tertiary-bg-dark: #1e1f22;
+
+$border-width:  2px;
+$border-widths: (
+  1: 2px,
+  2: 3px,
+  3: 4px,
+  4: 5px,
+  5: 6px
+);
+
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/utilities";
+
+// Layout & components
+@import "../node_modules/bootstrap/scss/root";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/type";
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/tables";
+@import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/transitions";
+@import "../node_modules/bootstrap/scss/dropdown";
+@import "../node_modules/bootstrap/scss/button-group";
+@import "../node_modules/bootstrap/scss/nav";
+@import "../node_modules/bootstrap/scss/navbar";
+@import "../node_modules/bootstrap/scss/card";
+@import "../node_modules/bootstrap/scss/accordion";
+@import "../node_modules/bootstrap/scss/breadcrumb";
+@import "../node_modules/bootstrap/scss/pagination";
+@import "../node_modules/bootstrap/scss/badge";
+@import "../node_modules/bootstrap/scss/alert";
+@import "../node_modules/bootstrap/scss/progress";
+@import "../node_modules/bootstrap/scss/list-group";
+@import "../node_modules/bootstrap/scss/close";
+@import "../node_modules/bootstrap/scss/toasts";
+@import "../node_modules/bootstrap/scss/modal";
+@import "../node_modules/bootstrap/scss/tooltip";
+@import "../node_modules/bootstrap/scss/popover";
+@import "../node_modules/bootstrap/scss/carousel";
+@import "../node_modules/bootstrap/scss/spinners";
+@import "../node_modules/bootstrap/scss/offcanvas";
+@import "../node_modules/bootstrap/scss/placeholders";
+
+// Helpers
+@import "../node_modules/bootstrap/scss/helpers";
+
+// Utilities
+@import "../node_modules/bootstrap/scss/utilities/api";
+
 @import url('https://fonts.googleapis.com/css2?family=Nabla&family=Prompt:wght@300&family=REM:wght@300&display=swap');
 
-
-html {
-  background-color: #18191b;
-  color: #fff;
-  contain: paint;
-  /*overflow-y: hidden;*/
-}
-
 body {
+  contain: paint;
   margin: 0;
   display: flex;
   flex-flow: column nowrap;
-  font-family: 'Prompt', sans-serif;
+  //font-family: 'Prompt', sans-serif;
   overflow-x: hidden;
   box-sizing: border-box;
-}
-
-nav {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  font-size: 1.5rem;
-  padding: 1rem 4rem;
-  box-sizing: border-box;
-
-  flex-wrap: wrap;
-
-  p {
-    margin: 0;
-
-    a {
-      color: #fff;
-    }
-
-    &:not(:last-child) {
-      &::after {
-        content: '//';
-        margin: 0 2rem;
-      }
-    }
-  }
+  min-height: 100vh;
 }
 
 .heroTitle {
   padding: 1rem 3rem;
 
-  h1 {
-    font-family: "Nabla";
-    font-size: 5rem;
-    margin: 0;
-  }
+  font-family: "Nabla";
+  font-size: 5rem;
+  margin: 0;
 }
 
 .repoCards {
@@ -70,31 +108,24 @@ nav {
     box-sizing: border-box;
     padding: 0.5rem;
     margin: 0.5rem;
-    background: #202222;
   }
   
   p {
-    margin: 0.2rem;
+    margin: 0.25rem;
   }
 
   span {
-    margin: 0 4px;
+    margin-right: 8px;
     box-sizing: border-box;
     
     vertical-align: middle;
     
     svg {
-      position: relative;
-      top: 0;
+
     }
 
     &.tag {
-      display: inline-block;
-      border-radius: 1rem;
-    border: 2px solid #2f3333;
-      background: #202222;
-      padding: 0px 8px;
-      margin: 2px 4px;
+      border: 2px solid #2f3333;
     }
   }
 }

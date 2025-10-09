@@ -1,10 +1,14 @@
 import { JSX } from 'preact';
+import { Container } from './container';
+import { Title } from './heroTitle';
 
 export function Navbar(links): JSX.Element {
-  return <nav>
-    <NavLink text="About Me" />
-    <NavLink text="Repositories" />
-    <NavLink text="Documentation" />
+  return <nav class="navbar bg-body-tertiary border-bottom border-dark-subtle">
+    <Container>
+      <a class="navbar-brand" href="#">
+        <Title text="lilykiwi.xyz" />
+      </a>
+    </Container>
   </nav>;
 }
 

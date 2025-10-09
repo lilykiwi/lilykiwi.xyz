@@ -3,6 +3,7 @@ import html from '@rollup/plugin-html';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import scss from 'rollup-plugin-scss';
 import typescript from 'rollup-plugin-typescript2';
+import serve from 'rollup-plugin-serve';
 
 export default {
   input: 'src/index.tsx',
@@ -41,5 +42,6 @@ export default {
         { name: 'viewport', content: 'width=device-width,initial-scale=1' }
       ]
     }),
+    serve('output-dev')
   ],
 };

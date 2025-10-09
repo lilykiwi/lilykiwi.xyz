@@ -1,13 +1,11 @@
 import './style.scss';
 
-import { Navbar } from 'components/navbar';
+import {Home} from 'pages/home';
 
 // global imports
 import { render, JSX } from 'preact';
 import { useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
-import { Title } from 'components/heroTitle';
-import { Repositories } from 'components/repos';
 
 /**
  * Main page component. Renders the sidebar and content.
@@ -20,11 +18,9 @@ export function Page(): JSX.Element {
     value.value = element?.scrollTop || 0;
   }, []);
 
-  return <>
-    <Navbar />
-    <Title text="lilykiwi.xyz" />
-    <Repositories />
-  </>;
+  return <Home/>;
 }
 
+// TODO: add a toggle for light/dark mode
+document.body.setAttribute("data-bs-theme", "dark");
 render(<Page />, document.body);

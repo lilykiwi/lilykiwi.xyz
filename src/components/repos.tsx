@@ -21,7 +21,6 @@ export function Repositories(): JSX.Element {
 
   useEffect(() => {
     async function getData() {
-      // TODO: cache this
       const repos: Response = await fetch("https://api.github.com/users/lilykiwi/repos", { cache: "force-cache" });
       if (repos.status !== 200) {
         return;
@@ -49,16 +48,16 @@ export function Repositories(): JSX.Element {
     return <div class="repoCards"></div>;
   }
 
-  return <div class=" repoCards" >      
+  return <div class="repoCards" >      
     {fetchedData.value.map((repo: any) => (
-      <a href={repo.html_url}>
+      <a href={repo.html_url} class="card bg-body-secondary border border-dark-subtle">
         <p class="repoTitle">
           <span class="repoIcon">
             {repo.is_archived ?
-              <ArchiveIcon verticalAlign="middle" /> :
+              <ArchiveIcon /> :
               repo.is_fork ?
-                <RepoForkedIcon verticalAlign="middle" /> :
-                <RepoIcon verticalAlign="middle" />}
+                <RepoForkedIcon /> :
+                <RepoIcon />}
           </span>
           <span class="name">
             {repo.name}
@@ -67,7 +66,7 @@ export function Repositories(): JSX.Element {
         <p class="tags">
           {repo.tags.map((tag: string) => {
             return (
-              <span class="tag">
+              <span class="tag badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill">
                 {tag}
               </span>
             );
@@ -75,15 +74,15 @@ export function Repositories(): JSX.Element {
         </p>
         <p class="repoDescription">{repo.description}</p>
         <p class="repoMeta">
-          <span class="stars">
-            <StarIcon verticalAlign="middle" />{repo.stars}
+          <span class="stars badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">
+            <StarIcon /> {repo.stars}
           </span>
-          <span class="commits">
-            <HistoryIcon verticalAlign="middle" />{TimeFormat(Date.parse(repo.last_commit))}
+          <span class="commits badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
+            <HistoryIcon /> {TimeFormat(Date.parse(repo.last_commit))}
           </span>
           {repo.license ?
-            <span class="license">
-              <LawIcon verticalAlign="middle" />{repo.license}
+            <span class="license badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill">
+              <LawIcon /> {repo.license}
             </span> : ""
           }
         </p>

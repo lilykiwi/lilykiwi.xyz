@@ -28,7 +28,8 @@ This is the source code for my personal website, [lilykiwi.xyz](https://lilykiwi
 
 ## Usage
 
-- `pnpm run watch` - watches src/** for changes and rebuilds on change. might be buggy (I'm working on it!!)
+- `pnpm run watch-dev` - watches src/** for changes and runs `build-dev` again on change.
+- `pnpm run build-dev` - builds the site to `output-dev/` and serves it using rollup-plugin-serve.
 - `pnpm run build` - builds the site to `output/`
 - `pnpm run doc`   - generates Markdown documentation in `docs/` using [TypeDoc](https://typedoc.org/)
 
