@@ -1,5 +1,4 @@
 import alias from '@rollup/plugin-alias';
-import html from '@rollup/plugin-html';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import scss from 'rollup-plugin-scss';
 import typescript from '@rollup/plugin-typescript';
@@ -8,14 +7,14 @@ import serve from 'rollup-plugin-serve';
 export default {
   input: 'src/index.tsx',
   output: {
-    dir: 'output-dev',
+    dir: 'dist',
     format: 'es',
     name: 'lilykiwi.xyz',
     sourcemap: true,
     chunkFileNames: '[name].js'
   },
   watch: {
-    clearScreen: false,
+    clearScreen: true,
     include: "src/**/*",
     chokidar: {
       usePolling: true
@@ -35,13 +34,6 @@ export default {
     scss({
       fileName: 'bundle.css'
     }),
-    html({
-      title: 'lilykiwi.xyz',
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width,initial-scale=1' }
-      ]
-    }),
-    serve('output-dev')
+    serve('dist')
   ],
 };

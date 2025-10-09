@@ -10,8 +10,8 @@
 #.pnp.loader.mjs |
 
 # build goes to /output
-/output
-/output-dev
+/dist/**
+!dist/index.html
 
 # docs are built to /docs
 # comment this out to include them on the repo

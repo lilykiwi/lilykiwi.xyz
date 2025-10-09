@@ -1,26 +1,20 @@
 import alias from '@rollup/plugin-alias';
-import html from '@rollup/plugin-html';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import scss from 'rollup-plugin-scss';
 import typescript from '@rollup/plugin-typescript';
+import del from 'rollup-plugin-delete'
 
 export default {
   input: 'src/index.tsx',
   output: {
-    dir: 'output',
+    dir: 'dist',
     format: 'es',
     name: 'lilykiwi.xyz',
     sourcemap: false,
     chunkFileNames: '[name].js'
   },
-  watch: {
-    clearScreen: false,
-    include: "src/**/*",
-    chokidar: {
-      usePolling: true
-    }
-  },
   plugins: [
+    del({ targets: 'dist/*.js.map' }),
     alias({
       entries: [
         { find: 'react', replacement: 'preact/compat' },
@@ -34,13 +28,6 @@ export default {
     scss({
       fileName: 'bundle.css',
       outputStyle: 'compressed'
-    }),
-    html({
-      title: 'lilykiwi.xyz',
-      meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width,initial-scale=1' }
-      ]
     }),
   ],
 };
