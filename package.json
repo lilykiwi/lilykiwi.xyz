@@ -16,8 +16,8 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "watch-dev": "pnpm run build-dev --watch",
-    "build-dev": "rollup --config rollup.config.dev.ts",
-    "build": "rollup --config rollup.config.prod.ts",
+    "build-dev": "rollup --config rollup.config.dev.ts --configPlugin @rollup/plugin-typescript",
+    "build": "rollup --config rollup.config.prod.ts --configPlugin @rollup/plugin-typescript",
     "doc": "typedoc --plugin typedoc-plugin-markdown"
   },
   "dependencies": {
