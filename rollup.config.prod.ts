@@ -2,7 +2,7 @@ import alias from '@rollup/plugin-alias';
 import html from '@rollup/plugin-html';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import scss from 'rollup-plugin-scss';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 
 export default {
   input: 'src/index.tsx',
@@ -32,7 +32,8 @@ export default {
     nodeResolve(),
     typescript(),
     scss({
-      fileName: 'bundle.css'
+      fileName: 'bundle.css',
+      outputStyle: 'compressed'
     }),
     html({
       title: 'lilykiwi.xyz',
