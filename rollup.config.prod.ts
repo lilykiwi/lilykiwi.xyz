@@ -2,6 +2,7 @@ import alias from '@rollup/plugin-alias'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import scss from 'rollup-plugin-scss'
 import typescript from '@rollup/plugin-typescript'
+import del from 'rollup-plugin-delete'
 
 export default {
   input: 'src/index.tsx',
