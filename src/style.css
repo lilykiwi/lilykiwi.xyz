@@ -17,14 +17,14 @@
 
   --border-width: 2px;
   --radius: 16px;
-  /* fine film grain, dithers away the banding that low-contrast gradients get on 8-bit displays */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E") 0 0 / 160px 160px;
+  /* zero-mean (white + black) noise: dithers away gradient banding without lightening or darkening the base */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='3' intercept='-1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='3' intercept='-1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23w%29' opacity='.06'/%3E%3Crect width='100%25' height='100%25' filter='url%28%23b%29' opacity='.06'/%3E%3C/svg%3E") 0 0 / 200px 200px;
   /* viewport-anchored blobs (the hero and strip both use fixed attachment) so the two always line up */
   --header-bg:
     var(--grain),
     radial-gradient(
       55vw 70vh at 8% 0%,
-      color-mix(in oklab, var(--primary) 20%, transparent),
+      color-mix(in oklab, var(--primary) 30%, transparent),
       transparent
     ),
     radial-gradient(
@@ -96,7 +96,6 @@ a {
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(12px);
   background: var(--header-bg);
   background-attachment: fixed;
   border-bottom: var(--border-width) solid var(--border);
@@ -113,6 +112,11 @@ a {
   transition:
     opacity 0.1s ease,
     transform 0.25s ease;
+}
+
+.navbar.stuck {
+  /* blur only once it overlays cards, so at rest the strip and hero render identically */
+  backdrop-filter: blur(12px);
 }
 
 .stuck .navbar-brand {
