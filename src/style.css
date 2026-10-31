@@ -165,11 +165,19 @@ a {
   margin-left: auto;
 }
 
-/* border rather than text-decoration, so the underline runs under the icon too */
+/* drawn by a pseudo-element rather than text-decoration so it spans the icon too,
+   and rather than a border so it takes no space and the text stays on the same baseline as its neighbours */
 .navbar .linkRow a[aria-current='page'] {
+  position: relative;
   color: var(--text-strong);
-  border-bottom: var(--border-width) solid var(--primary);
-  padding-bottom: 0.15rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -0.1rem;
+    height: var(--border-width);
+    background: var(--primary);
+  }
 }
 
 .hero {
