@@ -111,16 +111,25 @@ a {
   line-height: 1;
   text-decoration: none;
   color: var(--text-strong);
+  /* out of layout, hit-testing and the tab order until it's needed; allow-discrete keeps the fade */
+  display: none;
   opacity: 0;
-  transform: translateY(-12px);
+  transform: translateY(-100px);
   transition:
-    opacity 0.1s ease,
-    transform 0.25s ease;
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    display 0.3s allow-discrete;
 }
 
 .siteHeader.titleGone .navbar-brand {
+  display: block;
   opacity: 1;
   transform: none;
+
+  @starting-style {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
 }
 
 .navbarInner {
@@ -183,8 +192,8 @@ a {
 .heroTagline {
   margin: 0.5rem 0 0;
   font-family: 'REM', sans-serif;
-  font-size: 1.1rem;
-  color: var(--primary);
+  font-size: 1.5rem;
+  color: var(--text-strong);
 }
 
 .repoCards {
