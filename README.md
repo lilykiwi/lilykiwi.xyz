@@ -114,6 +114,7 @@ The available `icon` names are listed at the top of `src/components/sidebar.tsx`
 
 ```
 astro.config.mjs        Astro config (Preact integration, static output)
+deploy.sh               publishes dist/ as a new release on the server
 scripts/gen-icons.cjs   regenerates src/components/icons.tsx from @primer/octicons
 src/
   content.config.ts     schemas for the blog and albums collections
@@ -124,17 +125,21 @@ src/
   pages/                file-based routes: index, blog/, gallery/
   components/
     Shell.tsx           sticky header, scroll handling, section menu (hydrated in the browser)
-    hero.tsx navbar.tsx the large header and the sticky link strip
+    hero.tsx            the large header (heroTitle.tsx is its title)
+    navbar.tsx          the sticky link strip
     sidebar.tsx         scrollspy hook, section links and the floating hamburger
-    repos.tsx           GitHub repository list (client-side fetch)
+    repos.tsx           GitHub repository list (client-side fetch), repos/repoCard.tsx is one card
+    container.tsx       centred page-width wrapper
     icons.tsx           generated SVG icons
+    *.astro             server-rendered pieces: AlbumGrid, PostList, PageLink, Sections
   lib/albums.ts         finds the photos in each album folder
+  lib/posts.ts          published blog posts, newest first
   style.css             all styles
 ```
 
 ## Deploying
 
-`bun run build`, then run `./deploy.sh`, which copies `dist/` into `/data/releases/<timestamp>` and points the `/data/www` symlink at it in one atomic step, keeping the last 5 releases. To roll back, re-point the symlink at an older release: `ln -sfn /data/releases/<timestamp> /data/www.tmp && mv -T /data/www.tmp /data/www`. The build output is plain static files, so any web server that serves a directory will do. Every page is a `<path>/index.html`, so URLs like `/blog/my-post/` work without any rewrite rules.
+On the server, run `bun run build`, then `bash deploy.sh`, which copies `dist/` into `/data/releases/<timestamp>` and points the `/data/www` symlink at it in one atomic step, keeping the last 5 releases. To roll back, re-point the symlink at an older release: `ln -sfn /data/releases/<timestamp> /data/www.tmp && mv -T /data/www.tmp /data/www`. The build output is plain static files, so any web server that serves a directory will do. Every page is a `<path>/index.html`, so URLs like `/blog/my-post/` work without any rewrite rules.
 
 ## License
 
