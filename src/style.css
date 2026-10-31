@@ -83,7 +83,9 @@ a {
   color: var(--text-strong);
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .stuck .navbar-brand {
@@ -155,7 +157,7 @@ a {
     text-decoration: none;
     color: var(--text-strong);
     break-inside: avoid;
-    animation: rise 0.5s ease backwards;
+    animation: descend 0.5s ease backwards;
     animation-delay: calc(var(--i, 0) * 40ms);
     transition:
       transform 0.2s ease,
@@ -230,10 +232,10 @@ a {
   color: var(--primary);
 }
 
-@keyframes rise {
+@keyframes descend {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(-12px);
   }
 }
 
