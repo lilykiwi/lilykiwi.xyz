@@ -17,15 +17,13 @@
     "dev": "astro dev",
     "build": "astro sync && tsc --noEmit && astro build",
     "preview": "astro preview",
-    "check": "astro sync && tsc --noEmit",
-    "doc": "typedoc --plugin typedoc-plugin-markdown"
+    "check": "astro sync && tsc --noEmit"
   },
   "dependencies": {
     "@astrojs/preact": "^6.1.1",
     "@preact/signals": "^2.11.4",
     "astro": "^7.4.4",
-    "preact": "11.1.1",
-    "typedoc-plugin-markdown": "^4.9.0"
+    "preact": "11.1.1"
   },
   "devDependencies": {
     "@primer/octicons": "^19.42.0",

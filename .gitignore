@@ -20,5 +20,4 @@ desktop.ini
 /.astro
 
 # photo albums stay out of git (originals can be huge and carry location data);
-# the README at the top of the folder is still tracked. Use `git add -f` to commit one on purpose.
 /src/content/albums/*/
