@@ -27,20 +27,27 @@ export function useScrollspy(items: SidebarItem[]): Signal<string> {
     if (!items.length) return;
 
     const update = () => {
+      // Work from where the sections actually are on the page, so this never depends on the order of `items`.
+      const found = items
+        .map((item) => ({ id: item.id, top: document.getElementById(item.id)?.getBoundingClientRect().top }))
+        .filter((s): s is { id: string; top: number } => s.top !== undefined)
+        .sort((a, b) => a.top - b.top);
+      if (!found.length) return;
+
+      // A section is current once its top reaches the line just under the strip. Jumping to a heading by link
+      // parks it at the strip plus the 1rem scroll-padding, so the line sits a few pixels below that: the target
+      // counts as current even when it's short and the next section is close behind.
       const stripBottom = document.querySelector<HTMLElement>('.navbar')?.getBoundingClientRect().bottom ?? 0;
-      // a section becomes current once its top passes a line a little below the strip
-      const line = Math.max(stripBottom, 0) + window.innerHeight * 0.2;
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const line = Math.max(stripBottom, 0) + rem * 1.5;
 
-      let current = items[0].id;
-      for (const item of items) {
-        const el = document.getElementById(item.id);
-        if (el && el.getBoundingClientRect().top <= line) current = item.id;
-      }
+      let current = found[0].id;
+      for (const s of found) if (s.top <= line) current = s.id;
 
-      // short first/last sections can never own the line, so hand over at the page's ends
+      // the first and last sections can't always reach the line, so hand over at the page's ends
       const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
       const atTop = window.scrollY < 4;
-      active.value = atBottom ? items[items.length - 1].id : atTop ? items[0].id : current;
+      active.value = atBottom ? found[found.length - 1].id : atTop ? found[0].id : current;
     };
 
     update();

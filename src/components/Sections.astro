@@ -1,0 +1,19 @@
+---
+import type { SidebarItem } from './sidebar';
+
+interface Props {
+  /** the single source of truth for section order: it sets both the page order and the menu order */
+  sections: SidebarItem[];
+}
+
+const { sections } = Astro.props;
+---
+
+{
+  sections.map((section) => (
+    <section id={section.id} class="section">
+      <h2 class="sectionHeading">{section.label}</h2>
+      <slot name={section.id} />
+    </section>
+  ))
+}
