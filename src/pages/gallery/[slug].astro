@@ -1,7 +1,7 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import { getAlbums, getPhotos } from '../../lib/albums';
+import { count, getAlbums, getPhotos } from '../../lib/albums';
 
 export async function getStaticPaths() {
   const albums = await getAlbums();
@@ -21,7 +21,7 @@ const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', mon
   <header class="albumHeader">
     <p><a href="/gallery/">← gallery</a></p>
     <h1 class="sectionHeading">{album.data.title}</h1>
-    <p class="postMeta">{format(album.data.date)} · {photos.length} photos</p>
+    <p class="postMeta">{format(album.data.date)} · {count(photos.length)}</p>
     {album.data.description && <p>{album.data.description}</p>}
   </header>
 

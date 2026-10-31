@@ -39,3 +39,6 @@ export function getCover(album: Album): Photo | undefined {
   const photos = getPhotos(album);
   return photos.find((p) => p.file === album.data.cover) ?? photos[0];
 }
+
+/** "1 photo" / "3 photos". */
+export const count = (n: number) => `${n} photo${n === 1 ? '' : 's'}`;

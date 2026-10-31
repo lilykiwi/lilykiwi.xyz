@@ -1,12 +1,13 @@
 import type { JSX } from 'preact';
 import { useLayoutEffect } from 'preact/hooks';
 import { useSignal, type Signal } from '@preact/signals';
-import { ImageIcon, PersonIcon, RepoIcon, ThreeBarsIcon, XIcon } from './icons';
+import { BookIcon, ImageIcon, PersonIcon, RepoIcon, ThreeBarsIcon, XIcon } from './icons';
 
 // Icons are referenced by name because island props from Astro have to be serialisable.
 const icons = {
   person: PersonIcon,
   repo: RepoIcon,
+  book: BookIcon,
   image: ImageIcon,
 };
 

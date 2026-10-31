@@ -1,36 +1,12 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import { getAlbums, getCover, getPhotos } from '../../lib/albums';
+import AlbumGrid from '../../components/AlbumGrid.astro';
+import { getAlbums } from '../../lib/albums';
 
 const albums = await getAlbums();
-
-const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' });
 ---
 
 <Base title="gallery · lilykiwi.xyz" description="Photo albums from lilykiwi.xyz">
   <h1 class="sectionHeading">gallery</h1>
-
-  {
-    albums.length === 0 ? (
-      <p class="placeholder">no albums yet.</p>
-    ) : (
-      <div class="albumGrid">
-        {albums.map((album) => {
-          const cover = getCover(album);
-          return (
-            <a class="albumCard" href={`/gallery/${album.id}/`}>
-              {cover && (
-                <Image src={cover.image} alt={cover.alt} width={640} height={480} format="webp" />
-              )}
-              <span class="albumTitle">{album.data.title}</span>
-              <span class="albumMeta">
-                {format(album.data.date)} · {getPhotos(album).length} photos
-              </span>
-            </a>
-          );
-        })}
-      </div>
-    )
-  }
+  <AlbumGrid albums={albums} />
 </Base>

@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import { count, getCover, getPhotos, type Album } from '../lib/albums';
+
+interface Props {
+  albums: Album[];
+}
+
+const { albums } = Astro.props;
+
+const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' });
+---
+
+{
+  albums.length === 0 ? (
+    <p class="placeholder">no albums yet.</p>
+  ) : (
+    <div class="albumGrid">
+      {albums.map((album) => {
+        const cover = getCover(album);
+        return (
+          <a class="albumCard" href={`/gallery/${album.id}/`}>
+            {cover && <Image src={cover.image} alt={cover.alt} width={640} height={480} format="webp" />}
+            <span class="albumTitle">{album.data.title}</span>
+            <span class="albumMeta">
+              {format(album.data.date)} · {count(getPhotos(album).length)}
+            </span>
+          </a>
+        );
+      })}
+    </div>
+  )
+}
