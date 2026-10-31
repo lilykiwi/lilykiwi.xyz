@@ -4,7 +4,7 @@ import { useSignal } from '@preact/signals';
 import { Hero } from './hero';
 import { Navbar } from './navbar';
 import { Container } from './container';
-import { MenuAnchor, useScrollspy, type SidebarItem } from './sidebar';
+import { BackButton, MenuAnchor, useScrollspy, type BackLink, type SidebarItem } from './sidebar';
 
 // widescreen = enough gutter beside the content for the floating menu (keep in sync with the 85rem media queries)
 const isWide = () => window.matchMedia('(min-width: 85rem)').matches;
@@ -16,6 +16,8 @@ interface ShellProps {
   hero?: boolean;
   /** the page's sections; drives the floating menu and scrollspy. Empty hides the menu */
   sections?: SidebarItem[];
+  /** parent page link, shown in the hamburger's slot on pages without sections */
+  back?: BackLink;
   children?: ComponentChildren;
 }
 
@@ -23,7 +25,7 @@ interface ShellProps {
  * The site chrome shared by every page: hero + sticky nav strip, and the section menu.
  * The page body arrives as children.
  */
-export function Shell({ path, hero = false, sections = [], children }: ShellProps): JSX.Element {
+export function Shell({ path, hero = false, sections = [], back, children }: ShellProps): JSX.Element {
   const stuck = useSignal(false);
   const titleGone = useSignal(!hero);
   const menuOpen = useSignal(false);
@@ -36,7 +38,17 @@ export function Shell({ path, hero = false, sections = [], children }: ShellProp
     const el = header.current;
     const heroEl = el?.querySelector<HTMLElement>('.hero');
     const title = el?.querySelector<HTMLElement>('.heroTitle');
-    if (!el || !heroEl || !title) return;
+    if (!el) return;
+
+    // No hero: the strip is pinned from the start, so it counts as stuck as soon as the page has scrolled under it.
+    if (!heroEl || !title) {
+      const onScroll = () => {
+        stuck.value = window.scrollY > 0;
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      return () => window.removeEventListener('scroll', onScroll);
+    }
 
     const measure = () => el.style.setProperty('--hero-h', `${heroEl.offsetHeight}px`);
     measure();
@@ -81,6 +93,7 @@ export function Shell({ path, hero = false, sections = [], children }: ShellProp
       {hero && <Hero />}
       <Navbar
         path={path}
+        back={back}
         items={sections}
         active={active.value}
         menuOpen={menuOpen.value}
@@ -100,6 +113,11 @@ export function Shell({ path, hero = false, sections = [], children }: ShellProp
               if (!isWide()) menuOpen.value = false;
             }}
           />
+        )}
+        {sections.length === 0 && back && (
+          <div class="menuAnchor">
+            <BackButton back={back} gutter />
+          </div>
         )}
         <main class="content">{children}</main>
       </div>

@@ -1,11 +1,13 @@
 import type { JSX } from 'preact';
 import { BookIcon, HomeIcon, ImageIcon, ThreeBarsIcon, XIcon } from './icons';
 import { Container } from './container';
-import { SectionLinks, type SidebarItem } from './sidebar';
+import { BackButton, SectionLinks, type BackLink, type SidebarItem } from './sidebar';
 
 interface NavbarProps {
   /** pathname of the page being shown, used to mark the current link */
   path: string;
+  /** parent page link, shown instead of the section menu button on pages without sections */
+  back?: BackLink;
   items: SidebarItem[];
   active: string;
   menuOpen: boolean;
@@ -26,7 +28,7 @@ const isCurrent = (href: string, path: string) => (href === '/' ? path === '/' :
  * On narrow screens, where there's no gutter for the floating hamburger, this strip carries the
  * button and a dropdown of the page's sections instead. Pages without sections get neither.
  */
-export function Navbar({ path, items, active, menuOpen, onMenuToggle, onMenuClose }: NavbarProps): JSX.Element {
+export function Navbar({ path, back, items, active, menuOpen, onMenuToggle, onMenuClose }: NavbarProps): JSX.Element {
   return <>
     <nav class="navbar">
       <Container>
@@ -43,6 +45,7 @@ export function Navbar({ path, items, active, menuOpen, onMenuToggle, onMenuClos
               {menuOpen ? <XIcon /> : <ThreeBarsIcon />}
             </button>
           )}
+          {items.length === 0 && back && <BackButton back={back} />}
           <a class="navbar-brand" href="/">lilykiwi.xyz</a>
           <div class="linkRow">
             {links.map(({ href, label, Icon }) => (

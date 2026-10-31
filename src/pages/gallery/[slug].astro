@@ -1,7 +1,6 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import PageLink from '../../components/PageLink.astro';
 import { count, getAlbums, getPhotos } from '../../lib/albums';
 
 export async function getStaticPaths() {
@@ -18,9 +17,8 @@ const full = await Promise.all(photos.map((p) => getImage({ src: p.image, width:
 const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<Base title={`${album.data.title} · lilykiwi.xyz`} description={album.data.description}>
+<Base title={`${album.data.title} · lilykiwi.xyz`} description={album.data.description} back={{ href: '/gallery/', label: 'gallery', icon: 'image' }}>
   <header class="albumHeader">
-    <PageLink href="/gallery/" label="gallery" icon="image" />
     <h1 class="sectionHeading">{album.data.title}</h1>
     <p class="postMeta">{format(album.data.date)} · {count(photos.length)}</p>
     {album.data.description && <p>{album.data.description}</p>}

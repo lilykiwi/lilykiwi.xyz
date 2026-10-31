@@ -386,6 +386,7 @@ a {
   background: none;
   border: none;
   color: var(--text);
+  text-decoration: none;
   cursor: pointer;
 
   &:hover,
@@ -528,20 +529,10 @@ time {
   }
 }
 
-/* back / "see all" links: the nav strip's link style, on their own row */
+/* "see all" links: the nav strip's link style, on their own row at the right */
 .pageLinkRow {
-  margin: 0 0 0.75rem;
-
-  &.forward {
-    margin: 1rem 0 0;
-    justify-content: flex-end;
-  }
-
-  /* icon only, so give it a comfortable hit area */
-  &.back a {
-    padding: 0.25rem;
-    margin-left: -0.25rem;
-  }
+  margin: 1rem 0 0;
+  justify-content: flex-end;
 }
 
 /* gallery */
@@ -640,21 +631,6 @@ time {
     display: inline-flex;
   }
 
-  /* in the gutter the back link takes no space in the flow and stays pinned under the strip, like the hamburger */
-  .pageLinkRow.back {
-    position: sticky;
-    top: calc(var(--strip-h) + 1rem);
-    z-index: 5;
-    height: 0;
-    margin: 0;
-
-    a {
-      position: absolute;
-      top: 0;
-      right: calc(100% + 0.75rem);
-      white-space: nowrap;
-    }
-  }
 }
 
 @media (max-width: 85rem) {

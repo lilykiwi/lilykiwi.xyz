@@ -1,7 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import PageLink from '../../components/PageLink.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
@@ -14,8 +13,7 @@ const { Content } = await render(post);
 const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<Base title={`${post.data.title} · lilykiwi.xyz`} description={post.data.description}>
-  <PageLink href="/blog/" label="blog" icon="book" />
+<Base title={`${post.data.title} · lilykiwi.xyz`} description={post.data.description} back={{ href: '/blog/', label: 'blog', icon: 'book' }}>
   <article class="prose">
     <header>
       <h1>{post.data.title}</h1>

@@ -1,31 +1,17 @@
 ---
-import { ArrowRightIcon, BookIcon, HomeIcon, ImageIcon } from './icons';
+import { ArrowRightIcon } from './icons';
 
 interface Props {
   href: string;
-  /** back links show only an icon and use this as their accessible name; forward links show it as text */
   label: string;
-  /** back links lead to a page that has an icon in the nav strip; forward links end with an arrow and sit on the right */
-  direction?: 'back' | 'forward';
-  /** which nav strip icon to show on a back link */
-  icon?: 'home' | 'book' | 'image';
 }
 
-const { href, label, direction = 'back', icon = 'home' } = Astro.props;
-const Icon = { home: HomeIcon, book: BookIcon, image: ImageIcon }[icon];
+const { href, label } = Astro.props;
 ---
 
-<div class:list={['linkRow', 'pageLinkRow', direction === 'forward' ? 'forward' : 'back']}>
-  {
-    direction === 'back' ? (
-      <a href={href} aria-label={`Back to ${label}`} title={`Back to ${label}`}>
-        <Icon />
-      </a>
-    ) : (
-      <a href={href}>
-        {label}
-        <ArrowRightIcon />
-      </a>
-    )
-  }
+<div class="linkRow pageLinkRow">
+  <a href={href}>
+    {label}
+    <ArrowRightIcon />
+  </a>
 </div>

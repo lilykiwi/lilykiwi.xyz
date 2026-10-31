@@ -1,15 +1,23 @@
 import type { JSX } from 'preact';
 import { useLayoutEffect } from 'preact/hooks';
 import { useSignal, type Signal } from '@preact/signals';
-import { BookIcon, ImageIcon, PersonIcon, RepoIcon, ThreeBarsIcon, XIcon } from './icons';
+import { BookIcon, HomeIcon, ImageIcon, PersonIcon, RepoIcon, ThreeBarsIcon, XIcon } from './icons';
 
 // Icons are referenced by name because island props from Astro have to be serialisable.
 const icons = {
+  home: HomeIcon,
   person: PersonIcon,
   repo: RepoIcon,
   book: BookIcon,
   image: ImageIcon,
 };
+
+/** A "go up a level" link that takes the hamburger's place on pages with no sections. */
+export interface BackLink {
+  href: string;
+  label: string;
+  icon: keyof typeof icons;
+}
 
 export interface SidebarItem {
   id: string;
@@ -113,4 +121,20 @@ export function MenuAnchor({ items, active, open, onToggle, onClose }: {
       <SectionLinks items={items} active={active} onNavigate={onClose} />
     </div>
   </div>;
+}
+
+/**
+ * Icon-only link to the parent page. It occupies exactly the hamburger's slot (gutter on widescreen,
+ * left of the brand in the strip otherwise) so it reads as the same control on every page.
+ */
+export function BackButton({ back, gutter = false }: { back: BackLink; gutter?: boolean }): JSX.Element {
+  const Icon = icons[back.icon];
+  return <a
+    class={`menuButton${gutter ? ' menuButtonGutter' : ''}`}
+    href={back.href}
+    aria-label={`Back to ${back.label}`}
+    title={`Back to ${back.label}`}
+  >
+    <Icon />
+  </a>;
 }

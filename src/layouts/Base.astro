@@ -1,7 +1,7 @@
 ---
 import '../style.css';
 import { Shell } from '../components/Shell';
-import type { SidebarItem } from '../components/sidebar';
+import type { BackLink, SidebarItem } from '../components/sidebar';
 
 interface Props {
   title: string;
@@ -10,9 +10,11 @@ interface Props {
   hero?: boolean;
   /** sections for the floating menu and scrollspy; leave empty for pages that don't need one */
   sections?: SidebarItem[];
+  /** link to the parent page, shown where the hamburger would be on pages without sections */
+  back?: BackLink;
 }
 
-const { title, description = 'lilykiwi.xyz', hero = false, sections = [] } = Astro.props;
+const { title, description = 'lilykiwi.xyz', hero = false, sections = [], back } = Astro.props;
 const path = Astro.url.pathname;
 ---
 
@@ -32,7 +34,7 @@ const path = Astro.url.pathname;
     <slot name="head" />
   </head>
   <body>
-    <Shell client:load path={path} hero={hero} sections={sections}>
+    <Shell client:load path={path} hero={hero} sections={sections} back={back}>
       <slot />
     </Shell>
   </body>

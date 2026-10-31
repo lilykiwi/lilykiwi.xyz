@@ -1,14 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostList from '../../components/PostList.astro';
-import PageLink from '../../components/PageLink.astro';
 import { getPosts } from '../../lib/posts';
 
 const posts = await getPosts();
 ---
 
-<Base title="blog · lilykiwi.xyz" description="Posts from lilykiwi.xyz">
-  <PageLink href="/" label="home" icon="home" />
+<Base title="blog · lilykiwi.xyz" description="Posts from lilykiwi.xyz" back={{ href: '/', label: 'home', icon: 'home' }}>
   <h1 class="sectionHeading">blog</h1>
   <PostList posts={posts} />
 </Base>

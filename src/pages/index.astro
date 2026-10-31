@@ -36,12 +36,12 @@ const ALBUMS_SHOWN = 6;
 
     <Fragment slot="blog">
       <PostList posts={posts.slice(0, POSTS_SHOWN)} />
-      {posts.length > POSTS_SHOWN && <PageLink href="/blog/" label="all posts" direction="forward" />}
+      {posts.length > POSTS_SHOWN && <PageLink href="/blog/" label="all posts" />}
     </Fragment>
 
     <Fragment slot="gallery">
       <AlbumGrid albums={albums.slice(0, ALBUMS_SHOWN)} />
-      {albums.length > ALBUMS_SHOWN && <PageLink href="/gallery/" label="all albums" direction="forward" />}
+      {albums.length > ALBUMS_SHOWN && <PageLink href="/gallery/" label="all albums" />}
     </Fragment>
 
     <Fragment slot="projects">
