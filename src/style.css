@@ -118,7 +118,7 @@ a {
     transform 0.25s ease;
 }
 
-.siteHeader.stuck .navbar-brand {
+.siteHeader.titleGone .navbar-brand {
   opacity: 1;
   transform: none;
 }

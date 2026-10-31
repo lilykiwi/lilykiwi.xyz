@@ -12,6 +12,7 @@ import { useSignal } from '@preact/signals';
  */
 export function Home(): JSX.Element {
   const stuck = useSignal(false);
+  const titleGone = useSignal(false);
   const header = useRef<HTMLDivElement>(null);
 
   // The hero and nav strip live in one sticky block that is pulled up by the hero's height,
@@ -19,16 +20,18 @@ export function Home(): JSX.Element {
   useLayoutEffect(() => {
     const el = header.current;
     const hero = el?.querySelector<HTMLElement>('.hero');
-    if (!el || !hero) return;
+    const title = el?.querySelector<HTMLElement>('.heroTitle');
+    if (!el || !hero || !title) return;
 
     const measure = () => el.style.setProperty('--hero-h', `${hero.offsetHeight}px`);
     measure();
     const resize = new ResizeObserver(measure);
     resize.observe(hero);
 
-    // stuck once the hero has scrolled fully out of view
+    // stuck once the hero has scrolled fully out of view; the strip's brand takes over as soon as the big title is gone
     const onScroll = () => {
       stuck.value = window.scrollY >= hero.offsetHeight;
+      titleGone.value = title.getBoundingClientRect().bottom <= 0;
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -40,7 +43,7 @@ export function Home(): JSX.Element {
   }, []);
 
   return <>
-    <div ref={header} class={`siteHeader${stuck.value ? ' stuck' : ''}`}>
+    <div ref={header} class={`siteHeader${stuck.value ? ' stuck' : ''}${titleGone.value ? ' titleGone' : ''}`}>
       <Hero />
       <Navbar />
     </div>
