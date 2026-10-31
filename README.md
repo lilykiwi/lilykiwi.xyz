@@ -134,7 +134,7 @@ src/
 
 ## Deploying
 
-`bun run build`, then run `./deploy.sh`, which replaces `/data/www` with the contents of `dist/`. The build output is plain static files, so any web server that serves a directory will do. Every page is a `<path>/index.html`, so URLs like `/blog/my-post/` work without any rewrite rules.
+`bun run build`, then run `./deploy.sh`, which copies `dist/` into `/data/releases/<timestamp>` and points the `/data/www` symlink at it in one atomic step, keeping the last 5 releases. To roll back, re-point the symlink at an older release: `ln -sfn /data/releases/<timestamp> /data/www.tmp && mv -T /data/www.tmp /data/www`. The build output is plain static files, so any web server that serves a directory will do. Every page is a `<path>/index.html`, so URLs like `/blog/my-post/` work without any rewrite rules.
 
 ## License
 
