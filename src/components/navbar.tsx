@@ -11,9 +11,9 @@ export function Navbar(): JSX.Element {
     <Container>
       <div class="navbarInner">
         <a class="navbar-brand" href="#">lilykiwi.xyz</a>
-        <div class="navButtons">
-          <a class="navButton active" href="#" aria-current="page"><HomeIcon /> home</a>
-          <a class="navButton" href="#gallery"><ImageIcon /> gallery</a>
+        <div class="linkRow">
+          <a href="#" aria-current="page"><HomeIcon /> home</a>
+          <a href="#gallery"><ImageIcon /> gallery</a>
         </div>
       </div>
     </Container>

@@ -66,7 +66,7 @@ body {
     ),
     var(--bg);
   background-attachment: fixed;
-  min-height: 100vh;
+  min-height: calc(100vh + clamp(18rem, 45vh, 30rem));
   color: var(--text);
   font-family:
     system-ui,
@@ -134,7 +134,6 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
-  margin-top: 1.25rem;
 
   a {
     display: inline-flex;
@@ -149,36 +148,12 @@ a {
   }
 }
 
-.navButtons {
-  display: flex;
-  gap: 0.5rem;
-  margin-left: auto;
+.hero .linkRow {
+  margin-top: 1.25rem;
 }
 
-.navButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.3rem 0.9rem;
-  border: var(--border-width) solid var(--border);
-  border-radius: 50rem;
-  color: var(--text);
-  text-decoration: none;
-  transition:
-    border-color 0.2s ease,
-    color 0.2s ease;
-
-  &:hover,
-  &:focus-visible {
-    border-color: var(--primary);
-    color: var(--text-strong);
-    outline: none;
-  }
-
-  &.active {
-    border-color: color-mix(in oklab, var(--primary) 60%, transparent);
-    color: var(--text-strong);
-  }
+.navbar .linkRow {
+  margin-left: auto;
 }
 
 .hero {
@@ -187,6 +162,8 @@ a {
   justify-content: center;
   min-height: clamp(18rem, 45vh, 30rem);
   padding: clamp(2rem, 8vw, 5rem) 3rem clamp(1.5rem, 5vw, 3rem);
+  max-width: 1420px;
+  margin-inline: auto;
 }
 
 .heroTitle {
