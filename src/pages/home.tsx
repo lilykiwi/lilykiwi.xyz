@@ -4,7 +4,7 @@ import { Repositories } from '../components/repos';
 import { Container } from '../components/container';
 
 import { JSX } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
+import { useLayoutEffect, useRef } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 
 /**
@@ -12,23 +12,38 @@ import { useSignal } from '@preact/signals';
  */
 export function Home(): JSX.Element {
   const stuck = useSignal(false);
-  const sentinel = useRef<HTMLDivElement>(null);
+  const header = useRef<HTMLDivElement>(null);
 
-  // the navbar is stuck once the sentinel (directly above it) leaves the top of the viewport
-  useEffect(() => {
-    const el = sentinel.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      stuck.value = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-    });
-    observer.observe(el);
-    return () => observer.disconnect();
+  // The hero and nav strip live in one sticky block that is pulled up by the hero's height,
+  // so only the strip stays pinned. That keeps them a single painted surface (no seam).
+  useLayoutEffect(() => {
+    const el = header.current;
+    const hero = el?.querySelector<HTMLElement>('.hero');
+    if (!el || !hero) return;
+
+    const measure = () => el.style.setProperty('--hero-h', `${hero.offsetHeight}px`);
+    measure();
+    const resize = new ResizeObserver(measure);
+    resize.observe(hero);
+
+    // stuck once the hero has scrolled fully out of view
+    const onScroll = () => {
+      stuck.value = window.scrollY >= hero.offsetHeight;
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      resize.disconnect();
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   return <>
-    <Hero />
-    <div ref={sentinel} class="sentinel" />
-    <Navbar stuck={stuck.value} />
+    <div ref={header} class={`siteHeader${stuck.value ? ' stuck' : ''}`}>
+      <Hero />
+      <Navbar />
+    </div>
     <Container>
       <Repositories />
     </Container>
