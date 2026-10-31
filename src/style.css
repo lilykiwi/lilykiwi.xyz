@@ -522,9 +522,14 @@ time {
   }
 }
 
-.moreLink {
-  margin: 1rem 0 0;
-  text-align: right;
+/* back / "see all" links: the nav strip's link style, on their own row */
+.pageLinkRow {
+  margin: 0 0 0.75rem;
+
+  &.forward {
+    margin: 1rem 0 0;
+    justify-content: flex-end;
+  }
 }
 
 /* gallery */

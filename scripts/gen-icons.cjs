@@ -7,7 +7,7 @@ const octicons = require(path.join(root, 'node_modules/@primer/octicons'));
 
 const names = [
   'home', 'book', 'image', 'person', 'repo', 'repo-forked', 'archive', 'star', 'law',
-  'history', 'mark-github', 'mail', 'three-bars', 'x',
+  'history', 'mark-github', 'mail', 'three-bars', 'x', 'arrow-left', 'arrow-right',
 ];
 
 const pascal = (n) => n.split('-').map((s) => s[0].toUpperCase() + s.slice(1)).join('') + 'Icon';

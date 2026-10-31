@@ -1,6 +1,7 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import PageLink from '../../components/PageLink.astro';
 import { count, getAlbums, getPhotos } from '../../lib/albums';
 
 export async function getStaticPaths() {
@@ -19,7 +20,7 @@ const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', mon
 
 <Base title={`${album.data.title} · lilykiwi.xyz`} description={album.data.description}>
   <header class="albumHeader">
-    <p><a href="/gallery/">← gallery</a></p>
+    <PageLink href="/gallery/" label="gallery" />
     <h1 class="sectionHeading">{album.data.title}</h1>
     <p class="postMeta">{format(album.data.date)} · {count(photos.length)}</p>
     {album.data.description && <p>{album.data.description}</p>}

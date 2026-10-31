@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import AlbumGrid from '../../components/AlbumGrid.astro';
+import PageLink from '../../components/PageLink.astro';
 import { getAlbums } from '../../lib/albums';
 
 const albums = await getAlbums();
 ---
 
 <Base title="gallery · lilykiwi.xyz" description="Photo albums from lilykiwi.xyz">
+  <PageLink href="/" label="home" />
   <h1 class="sectionHeading">gallery</h1>
   <AlbumGrid albums={albums} />
 </Base>
