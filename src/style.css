@@ -94,6 +94,7 @@ a {
   max-width: 1320px;
 }
 
+/* site header: one sticky surface holding the hero and the nav strip */
 .siteHeader {
   position: sticky;
   /* --hero-h is set from the hero's height in home.tsx, so only the strip stays pinned */
@@ -107,8 +108,45 @@ a {
   backdrop-filter: blur(12px);
 }
 
+/* hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: clamp(18rem, 45vh, 30rem);
+  padding: clamp(2rem, 8vw, 5rem) 3rem clamp(1.5rem, 5vw, 3rem);
+  max-width: 1420px;
+  margin-inline: auto;
+}
+
+.heroTitle {
+  font-family: 'Nabla';
+  font-size: min(5rem, 10vw);
+  text-shadow: 0 0 32px color-mix(in oklab, var(--primary) 18%, transparent);
+  margin: 0;
+}
+
+.heroTagline {
+  margin: 0.5rem 0 0;
+  font-family: 'REM', sans-serif;
+  font-size: 1.5rem;
+  color: var(--text-strong);
+}
+
+.hero .linkRow {
+  margin-top: 1.25rem;
+}
+
+/* nav strip */
 .navbar {
   border-bottom: var(--border-width) solid var(--border);
+}
+
+.navbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3rem;
 }
 
 .navbar-brand {
@@ -131,13 +169,6 @@ a {
   visibility: visible;
   opacity: 1;
   transform: none;
-}
-
-.navbarInner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 3rem;
 }
 
 .linkRow {
@@ -163,10 +194,6 @@ a {
   }
 }
 
-.hero .linkRow {
-  margin-top: 1.25rem;
-}
-
 .navbar .linkRow {
   margin-left: auto;
 }
@@ -186,30 +213,264 @@ a {
   }
 }
 
-.hero {
+.sectionMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: 0.75rem 0;
+  background: var(--bg-tertiary);
+  border-bottom: var(--border-width) solid var(--border);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+/* page layout and the floating section menu */
+/* sidebar + content */
+.layout {
+  position: relative;
+  max-width: var(--content-w);
+  margin-inline: auto;
+  padding-top: 1.5rem;
+}
+
+/* zero-height sticky rail: the button and dropdown ride along under the strip without taking layout space */
+.menuAnchor {
+  position: sticky;
+  top: calc(var(--strip-h) + 1rem);
+  z-index: 5;
+  height: 0;
+}
+
+.menuButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  padding: 0.35rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--primary);
+  }
+}
+
+/* hamburger + dropdown, only used when the sidebar is hidden */
+.menuButtonGutter {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 0.75rem);
+}
+
+.menuPanel {
+  position: absolute;
+  top: 2.75rem;
+  /* flows leftwards from under the button, into the gutter, so it never covers the content */
+  right: calc(100% + 0.75rem);
+  width: max-content;
+  /* deliberately unstyled: the list sits straight on the page background (no fill, border or blur,
+     the last of which also shifted the fixed page gradient when it appeared) */
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.sectionLinks {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: clamp(18rem, 45vh, 30rem);
-  padding: clamp(2rem, 8vw, 5rem) 3rem clamp(1.5rem, 5vw, 3rem);
-  max-width: 1420px;
-  margin-inline: auto;
+  gap: 0.25rem;
+  border-left: var(--border-width) solid var(--border);
+
+  a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.9rem;
+    color: var(--text);
+    text-decoration: none;
+
+    svg {
+      translate: 0 0.1em;
+    }
+
+    &:hover {
+      color: var(--primary);
+    }
+
+    &[aria-current='location'] {
+      color: var(--text-strong);
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0 auto 0 calc(var(--border-width) * -1);
+        width: var(--border-width);
+        background: var(--primary);
+      }
+    }
+  }
 }
 
-.heroTitle {
-  font-family: 'Nabla';
-  font-size: min(5rem, 10vw);
-  text-shadow: 0 0 32px color-mix(in oklab, var(--primary) 18%, transparent);
+/* home sections, in page order: about, blog, gallery, projects */
+.section {
+  padding-bottom: 3rem;
+}
+
+/* The last section fills the screen below the strip (same offset as html's scroll-padding-top), so it can be brought
+   to the top and, with the room it adds, so can every section above it, without gaps between sections. */
+.section:last-child {
+  min-height: calc(100vh - var(--strip-h) - 1rem);
+  min-height: calc(100dvh - var(--strip-h) - 1rem);
+}
+
+.sectionHeading {
   margin: 0;
-}
-
-.heroTagline {
-  margin: 0.5rem 0 0;
   font-family: 'REM', sans-serif;
-  font-size: 1.5rem;
-  color: var(--text-strong);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
 }
 
+.placeholder {
+  margin: 0.75rem 0 0;
+  opacity: 0.6;
+}
+
+/* blog */
+.postList {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+
+  /* laid into the page rather than boxed: just a rule between entries */
+  li + li {
+    border-top: var(--border-width) solid var(--border);
+  }
+
+  a {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1rem 0;
+    color: var(--text-strong);
+    text-decoration: none;
+
+    &:hover .postTitle,
+    &:focus-visible .postTitle {
+      color: var(--primary);
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  li:first-child a {
+    padding-top: 0.25rem;
+  }
+}
+
+.postTitle {
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.postSummary,
+.postMeta,
+time {
+  color: var(--text);
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+.postMeta {
+  margin: 0.25rem 0 0;
+}
+
+/* "see all" links: the nav strip's link style, on their own row at the right */
+.pageLinkRow {
+  margin: 1rem 0 0;
+  justify-content: flex-end;
+}
+
+/* gallery */
+.albumGrid,
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.albumCard {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: var(--bg-secondary);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-strong);
+  text-decoration: none;
+  position: relative;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+
+  /* holds the card's original bottom edge as the hover boundary, so the lift
+     doesn't uncover the cursor and retrigger the hover */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 calc(-1 * var(--border-width));
+    height: 8px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateY(4px);
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: calc(var(--radius) - 6px);
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    outline: none;
+  }
+}
+
+.albumTitle {
+  padding: 0.25rem 0.5rem 0;
+  font-weight: 600;
+}
+
+.albumMeta {
+  padding: 0 0.5rem 0.25rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+/* projects */
 .repoCards {
   padding: 1rem 0;
   columns: 4 240px;
@@ -307,185 +568,7 @@ a {
   border-color: color-mix(in oklab, var(--info) 40%, transparent);
 }
 
-.sectionHeading {
-  margin: 0;
-  font-family: 'REM', sans-serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--primary);
-}
-
-/* sidebar + content */
-.layout {
-  position: relative;
-  max-width: var(--content-w);
-  margin-inline: auto;
-  padding-top: 1.5rem;
-}
-
-/* zero-height sticky rail: the button and dropdown ride along under the strip without taking layout space */
-.menuAnchor {
-  position: sticky;
-  top: calc(var(--strip-h) + 1rem);
-  z-index: 5;
-  height: 0;
-}
-
-.sectionLinks {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  border-left: var(--border-width) solid var(--border);
-
-  a {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem 0.9rem;
-    color: var(--text);
-    text-decoration: none;
-
-    svg {
-      translate: 0 0.1em;
-    }
-
-    &:hover {
-      color: var(--primary);
-    }
-
-    &[aria-current='location'] {
-      color: var(--text-strong);
-
-      &::before {
-        content: '';
-        position: absolute;
-        inset: 0 auto 0 calc(var(--border-width) * -1);
-        width: var(--border-width);
-        background: var(--primary);
-      }
-    }
-  }
-}
-
-/* hamburger + dropdown, only used when the sidebar is hidden */
-.menuButtonGutter {
-  position: absolute;
-  top: 0;
-  right: calc(100% + 0.75rem);
-}
-
-.menuPanel {
-  position: absolute;
-  top: 2.75rem;
-  /* flows leftwards from under the button, into the gutter, so it never covers the content */
-  right: calc(100% + 0.75rem);
-  width: max-content;
-  /* deliberately unstyled: the list sits straight on the page background (no fill, border or blur,
-     the last of which also shifted the fixed page gradient when it appeared) */
-
-  &[hidden] {
-    display: none;
-  }
-}
-
-.menuButton {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  margin-right: 0.75rem;
-  padding: 0.35rem;
-  background: none;
-  border: none;
-  color: var(--text);
-  text-decoration: none;
-  cursor: pointer;
-
-  &:hover,
-  &:focus-visible {
-    color: var(--primary);
-  }
-}
-
-.sectionMenu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  padding: 0.75rem 0;
-  background: var(--bg-tertiary);
-  border-bottom: var(--border-width) solid var(--border);
-
-  &[hidden] {
-    display: none;
-  }
-}
-
-.section {
-  padding-bottom: 2rem;
-}
-
-.section + .section {
-  padding-top: 1rem;
-}
-
-.placeholder {
-  margin: 0.75rem 0 0;
-  opacity: 0.6;
-}
-
-/* blog */
-.postList {
-  list-style: none;
-  margin: 1rem 0 0;
-  padding: 0;
-
-  /* laid into the page rather than boxed: just a rule between entries */
-  li + li {
-    border-top: var(--border-width) solid var(--border);
-  }
-
-  a {
-    display: grid;
-    gap: 0.15rem;
-    padding: 1rem 0;
-    color: var(--text-strong);
-    text-decoration: none;
-
-    &:hover .postTitle,
-    &:focus-visible .postTitle {
-      color: var(--primary);
-    }
-
-    &:focus-visible {
-      outline: none;
-    }
-  }
-
-  li:first-child a {
-    padding-top: 0.25rem;
-  }
-}
-
-.postTitle {
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-
-.postSummary,
-.postMeta,
-time {
-  color: var(--text);
-  opacity: 0.75;
-  font-size: 0.9rem;
-}
-
-.postMeta {
-  margin: 0.25rem 0 0;
-}
-
+/* detail pages: a blog post, then a gallery album */
 .prose {
   /*max-width: 44rem;*/
 
@@ -540,79 +623,6 @@ time {
       background: none;
     }
   }
-}
-
-/* "see all" links: the nav strip's link style, on their own row at the right */
-.pageLinkRow {
-  margin: 1rem 0 0;
-  justify-content: flex-end;
-}
-
-/* gallery */
-.albumGrid,
-.photoGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: 1rem;
-  margin: 1rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.albumCard {
-  display: grid;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  background: var(--bg-secondary);
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text-strong);
-  text-decoration: none;
-  position: relative;
-  transition:
-    border-color 0.2s ease,
-    transform 0.2s ease;
-
-  /* holds the card's original bottom edge as the hover boundary, so the lift
-     doesn't uncover the cursor and retrigger the hover */
-  &::after {
-    content: '';
-    position: absolute;
-    inset: auto 0 calc(-1 * var(--border-width));
-    height: 8px;
-    transition: transform 0.2s ease;
-  }
-
-  &:hover::after,
-  &:focus-visible::after {
-    transform: translateY(4px);
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    border-radius: calc(var(--radius) - 6px);
-  }
-
-  &:hover,
-  &:focus-visible {
-    border-color: var(--primary);
-    transform: translateY(-4px);
-    outline: none;
-  }
-}
-
-.albumTitle {
-  padding: 0.25rem 0.5rem 0;
-  font-weight: 600;
-}
-
-.albumMeta {
-  padding: 0 0.5rem 0.25rem;
-  font-size: 0.85rem;
-  opacity: 0.75;
 }
 
 .photoGrid {
