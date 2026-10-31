@@ -26,11 +26,10 @@
 }
 
 body {
-  contain: paint;
   margin: 0;
   display: flex;
   flex-flow: column nowrap;
-  overflow-x: hidden;
+  overflow-x: clip;
   background:
     radial-gradient(
       60rem 30rem at 15% -10%,
@@ -67,6 +66,10 @@ a {
 }
 
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
   background: color-mix(in oklab, var(--bg-tertiary) 70%, transparent);
   border-bottom: var(--border-width) solid var(--border);
 }
