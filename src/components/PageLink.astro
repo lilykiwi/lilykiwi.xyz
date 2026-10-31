@@ -11,7 +11,7 @@ interface Props {
 const { href, label, direction = 'back' } = Astro.props;
 ---
 
-<div class:list={['linkRow', 'pageLinkRow', direction === 'forward' && 'forward']}>
+<div class:list={['linkRow', 'pageLinkRow', direction === 'forward' ? 'forward' : 'back']}>
   <a href={href}>
     {direction === 'back' && <ArrowLeftIcon />}
     {label}
