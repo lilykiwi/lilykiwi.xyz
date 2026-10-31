@@ -111,25 +111,20 @@ a {
   line-height: 1;
   text-decoration: none;
   color: var(--text-strong);
-  /* out of layout, hit-testing and the tab order until it's needed; allow-discrete keeps the fade */
-  display: none;
+  /* not clickable, focusable or announced until it's needed; visibility (unlike display) fades everywhere */
+  visibility: hidden;
   opacity: 0;
   transform: translateY(-100px);
   transition:
     opacity 0.3s ease,
     transform 0.3s ease,
-    display 0.3s allow-discrete;
+    visibility 0.3s;
 }
 
 .siteHeader.titleGone .navbar-brand {
-  display: block;
+  visibility: visible;
   opacity: 1;
   transform: none;
-
-  @starting-style {
-    opacity: 0;
-    transform: translateY(-100px);
-  }
 }
 
 .navbarInner {
