@@ -2,9 +2,7 @@ import {
   RepoIcon,
   RepoForkedIcon,
   ArchiveIcon,
-  StarIcon,
-  LawIcon,
-  HistoryIcon,
+  StarFillIcon,
 } from '../icons'
 import type { JSX } from 'preact'
 
@@ -27,8 +25,7 @@ interface repoCardProps {
   stars: number
   is_fork: boolean
   is_archived: boolean
-  tags?: string[]
-  last_commit: string
+  language?: string
   index?: number
 }
 
@@ -43,8 +40,7 @@ export function RepoCard({
   stars,
   is_fork,
   is_archived,
-  tags = [],
-  last_commit,
+  language,
   index = 0,
 }: repoCardProps): JSX.Element {
   return (
@@ -61,30 +57,14 @@ export function RepoCard({
         </span>
         <span className="name">{name}</span>
       </p>
-      <p className="tags">
-        {tags.map((tag: string, idx: number) => {
-          return (
-            <span
-              key={tag + '-' + idx}
-              className="tag badge"
-            >
-              {tag}
-            </span>
-          )
-        })}
-      </p>
       <p className="repoDescription">{description}</p>
       <p className="repoMeta">
         <span className="stars badge">
-          <StarIcon /> {stars}
+          <StarFillIcon /> {stars}
         </span>
-        <span className="commits badge">
-          <HistoryIcon /> {TimeFormat(Date.parse(last_commit))}
-        </span>
+        {language ? <span className="language badge">{language}</span> : null}
         {license ? (
-          <span className="license badge">
-            <LawIcon /> {license}
-          </span>
+          <span className="license badge">{license}</span>
         ) : null}
       </p>
     </a>

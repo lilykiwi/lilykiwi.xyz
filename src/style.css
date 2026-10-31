@@ -539,32 +539,39 @@ time {
 }
 
 .badge {
-  display: inline-block;
-  padding: 0.35em 0.65em;
+  /* fixed height and centred text, so a glyph like the star doesn't change a badge's size */
+  display: inline-flex;
+  align-items: center;
+  /* a flex container drops the space between the icon and the text, so the gap stands in for it */
+  gap: 0.4em;
+  height: 1.625rem;
+  padding-inline: 0.625rem;
   font-size: 0.75em;
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
-  border: var(--border-width) solid var(--border);
+  /* one recipe for every badge: 20% tint fill, 40% tint border, full-strength text */
+  border: var(--border-width) solid
+    color-mix(in oklab, var(--badge, var(--text)) 40%, transparent);
   border-radius: 50rem;
-  background: color-mix(in oklab, var(--badge, var(--border)) 20%, transparent);
+  background: color-mix(in oklab, var(--badge, var(--text)) 20%, transparent);
   color: var(--badge, var(--text));
 }
 
-.tag {
-  --badge: var(--text);
+/* icons track the badge's text size instead of their 16px default */
+.badge svg {
+  width: 1em;
+  height: 1em;
 }
+
 .stars {
   --badge: var(--warning);
-  border-color: color-mix(in oklab, var(--warning) 40%, transparent);
 }
-.commits {
+.language {
   --badge: var(--primary);
-  border-color: color-mix(in oklab, var(--primary) 40%, transparent);
 }
 .license {
   --badge: var(--info);
-  border-color: color-mix(in oklab, var(--info) 40%, transparent);
 }
 
 /* detail pages: a blog post, then a gallery album */

@@ -2,9 +2,7 @@ import {
   RepoIcon,
   RepoForkedIcon,
   ArchiveIcon,
-  StarIcon,
-  LawIcon,
-  HistoryIcon,
+  StarFillIcon,
 } from './icons'
 import type { JSX } from 'preact'
 import { useSignal, type Signal } from '@preact/signals'
@@ -27,8 +25,8 @@ interface repoData {
   stars: number
   is_fork: boolean
   is_archived: boolean
-  tags: string[]
   last_commit: string
+  language?: string
 }
 
 /**
@@ -56,8 +54,8 @@ export function Repositories(): JSX.Element {
           stars: repo.stargazers_count,
           is_fork: repo.fork,
           is_archived: repo.archived,
-          tags: repo.topics,
           last_commit: repo.pushed_at,
+          language: repo.language,
         }
       })
     }
@@ -82,8 +80,7 @@ export function Repositories(): JSX.Element {
             stars={repo.stars}
             is_fork={repo.is_fork}
             is_archived={repo.is_archived}
-            tags={repo.tags}
-            last_commit={repo.last_commit}
+            language={repo.language}
           />
         ))}
       </div>
