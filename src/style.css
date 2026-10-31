@@ -228,12 +228,27 @@ a {
     text-decoration: none;
     color: var(--text-strong);
     break-inside: avoid;
+    position: relative;
     animation: descend 0.5s ease backwards;
     animation-delay: calc(var(--i, 0) * 40ms);
     transition:
       transform 0.2s ease,
       border-color 0.2s ease,
       box-shadow 0.2s ease;
+
+    /* holds the card's original bottom edge as the hover boundary, so the lift
+       doesn't uncover the cursor and retrigger the hover */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: auto -1px calc(-1 * var(--border-width));
+      height: 16px;
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+      transform: translateY(6px);
+    }
 
     &:hover,
     &:focus-visible {
@@ -474,7 +489,7 @@ time {
 }
 
 .prose {
-  max-width: 44rem;
+  /*max-width: 44rem;*/
 
   h1 {
     margin: 0;
@@ -555,9 +570,25 @@ time {
   border-radius: var(--radius);
   color: var(--text-strong);
   text-decoration: none;
+  position: relative;
   transition:
     border-color 0.2s ease,
     transform 0.2s ease;
+
+  /* holds the card's original bottom edge as the hover boundary, so the lift
+     doesn't uncover the cursor and retrigger the hover */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 calc(-1 * var(--border-width));
+    height: 8px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateY(4px);
+  }
 
   img {
     width: 100%;
@@ -630,7 +661,6 @@ time {
   .menuButtonGutter {
     display: inline-flex;
   }
-
 }
 
 @media (max-width: 85rem) {
