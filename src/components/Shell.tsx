@@ -57,6 +57,8 @@ export function Shell({ path, hero = false, sections = [], back, children }: She
 
     // stuck once the hero has scrolled fully out of view; the strip's brand takes over as soon as the big title is gone
     const onScroll = () => {
+      // mid-morph (see Base.astro) the hero is cropped out of its box, so its positions mean nothing; the scroll event fired when the morph ends re-checks
+      if (el.hasAttribute('data-morph')) return;
       stuck.value = window.scrollY >= heroEl.offsetHeight;
       titleGone.value = title.getBoundingClientRect().bottom <= 0;
     };

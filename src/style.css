@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Nabla&family=Prompt:wght@300&family=REM:wght@300&display=swap');
-
 :root {
   color-scheme: dark;
 
@@ -635,6 +633,33 @@ time {
 
 .albumHeader p {
   margin: 0.25rem 0;
+}
+
+/* page transitions. The client router (see Base.astro) swaps pages inside a view transition so the swap is atomic,
+   but the transition's own snapshot animation is switched off: Gecko and Blink size those snapshots differently, which
+   flattened the hero in Gecko. The hero's grow/shrink is instead a real height animation on .siteHeader (script in
+   Base.astro). While it runs, the strip is glued to the bottom edge and the hero is cropped from the top. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-old(root) {
+  display: none;
+}
+
+.siteHeader[data-morph] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: clip;
+
+  /* full width, so the hero's auto side margins centre it as they do in normal flow instead of shrinking it to its content */
+  > * {
+    flex: none;
+    width: 100%;
+  }
 }
 
 @keyframes descend {
