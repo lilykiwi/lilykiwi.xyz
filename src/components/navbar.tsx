@@ -13,12 +13,10 @@ interface NavbarProps {
   onMenuClose: () => void;
 }
 
-// Hidden for now: blog and gallery are sections on the home page, so these links (and "home") are redundant.
-// Uncomment to bring them back; /blog/ and /gallery/ still exist as their own pages.
-const links: { href: string; label: string; Icon: typeof HomeIcon }[] = [
-  // { href: '/', label: 'home', Icon: HomeIcon },
-  // { href: '/blog/', label: 'blog', Icon: BookIcon },
-  // { href: '/gallery/', label: 'gallery', Icon: ImageIcon },
+const links = [
+  { href: '/', label: 'home', Icon: HomeIcon },
+  { href: '/blog/', label: 'blog', Icon: BookIcon },
+  { href: '/gallery/', label: 'gallery', Icon: ImageIcon },
 ];
 
 const isCurrent = (href: string, path: string) => (href === '/' ? path === '/' : path.startsWith(href));
