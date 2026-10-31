@@ -17,6 +17,7 @@
 
   --border-width: 2px;
   --radius: 16px;
+  --header-bg: color-mix(in oklab, var(--bg-tertiary) 70%, transparent);
 }
 
 *,
@@ -70,7 +71,7 @@ a {
   top: 0;
   z-index: 10;
   backdrop-filter: blur(12px);
-  background: color-mix(in oklab, var(--bg-tertiary) 70%, transparent);
+  background: var(--header-bg);
   border-bottom: var(--border-width) solid var(--border);
 }
 
@@ -121,6 +122,7 @@ a {
 }
 
 .hero {
+  background: var(--header-bg);
   padding: clamp(2rem, 8vw, 5rem) 3rem clamp(1.5rem, 5vw, 3rem);
 }
 
