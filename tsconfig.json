@@ -1,39 +1,24 @@
 {
   "compilerOptions": {
+    "target": "ESNext",
     "module": "ESNext",
+    "moduleResolution": "Bundler",
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "removeComments": true,
     "skipLibCheck": true,
+    "noEmit": true,
     "baseUrl": "src/",
-    "rootDir": "./",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "paths": {
-      "react": [
-        "./node_modules/preact/compat/"
-      ],
-      "react-dom": [
-        "./node_modules/preact/compat/"
-      ]
-    }
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["vite/client"]
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "typedocOptions": {
-    "entryPoints": [
-      "src/index.tsx"
-    ],
+    "entryPoints": ["src/index.tsx"],
     "out": "docs",
     "gitRemote": "lilykiwi.xyz",
     "githubPages": false,
-    "readme": "none",
-  },
+    "readme": "none"
+  }
 }

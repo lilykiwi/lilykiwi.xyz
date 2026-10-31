@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Nabla&family=Prompt:wght@300&family=REM:wght@300&display=swap');
+
+:root {
+  color-scheme: dark;
+
+  --primary: #987ec0;
+  --secondary: #7e90c0;
+  --warning: #ffcd39;
+  --info: #9ec5fe;
+
+  --bg: #18191b;
+  --bg-secondary: #252729;
+  --bg-tertiary: #1e1f22;
+  --border: #2f3333;
+  --text: #dee2e6;
+  --text-strong: #fff;
+
+  --border-width: 2px;
+  --radius: 16px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  contain: paint;
+  margin: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--primary);
+}
+
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 12px;
+  max-width: 1320px;
+}
+
+.navbar {
+  background: var(--bg-tertiary);
+  border-bottom: var(--border-width) solid var(--border);
+}
+
+.navbar-brand {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.heroTitle {
+  padding: 1rem 3rem;
+  font-family: 'Nabla';
+  font-size: min(5rem, 10vw);
+  margin: 0;
+}
+
+.repoCards {
+  padding: 1rem 4rem;
+  columns: 4 240px;
+
+  a {
+    display: inline-block;
+    width: 100%;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg-secondary);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text-strong);
+  }
+
+  p {
+    margin: 0.25rem;
+  }
+
+  span {
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  border: var(--border-width) solid var(--border);
+  border-radius: 50rem;
+  background: color-mix(in srgb, var(--badge, var(--border)) 20%, transparent);
+  color: var(--badge, var(--text));
+}
+
+.tag { --badge: var(--text); }
+.stars { --badge: var(--warning); border-color: color-mix(in srgb, var(--warning) 40%, transparent); }
+.commits { --badge: var(--primary); border-color: color-mix(in srgb, var(--primary) 40%, transparent); }
+.license { --badge: var(--info); border-color: color-mix(in srgb, var(--info) 40%, transparent); }

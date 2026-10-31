@@ -46,7 +46,7 @@ export function RepoCard({
   last_commit,
 }: repoCardProps): JSX.Element {
   return (
-    <a href={url} className="card bg-body-secondary border border-dark-subtle">
+    <a href={url} className="card">
       <p className="repoTitle">
         <span className="repoIcon">
           {is_archived ? (
@@ -64,7 +64,7 @@ export function RepoCard({
           return (
             <span
               key={tag + '-' + idx}
-              className="tag badge bg-dark-subtle border border-dark-subtle text-dark-emphasis rounded-pill"
+              className="tag badge"
             >
               {tag}
             </span>
@@ -73,14 +73,14 @@ export function RepoCard({
       </p>
       <p className="repoDescription">{description}</p>
       <p className="repoMeta">
-        <span className="stars badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">
+        <span className="stars badge">
           <StarIcon /> {stars}
         </span>
-        <span className="commits badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">
+        <span className="commits badge">
           <HistoryIcon /> {TimeFormat(Date.parse(last_commit))}
         </span>
         {license ? (
-          <span className="license badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill">
+          <span className="license badge">
             <LawIcon /> {license}
           </span>
         ) : null}
