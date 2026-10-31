@@ -29,6 +29,7 @@ interface repoCardProps {
   is_archived: boolean
   tags?: string[]
   last_commit: string
+  index?: number
 }
 
 /**
@@ -44,9 +45,10 @@ export function RepoCard({
   is_archived,
   tags = [],
   last_commit,
+  index = 0,
 }: repoCardProps): JSX.Element {
   return (
-    <a href={url} className="card">
+    <a href={url} className="card" style={{ '--i': Math.min(index, 12) }}>
       <p className="repoTitle">
         <span className="repoIcon">
           {is_archived ? (

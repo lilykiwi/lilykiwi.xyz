@@ -31,7 +31,12 @@ body {
   display: flex;
   flex-flow: column nowrap;
   overflow-x: hidden;
-  background: var(--bg);
+  background:
+    radial-gradient(60rem 30rem at 15% -10%, color-mix(in srgb, var(--primary) 22%, transparent), transparent 70%),
+    radial-gradient(50rem 28rem at 95% 0%, color-mix(in srgb, var(--secondary) 16%, transparent), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+  min-height: 100vh;
   color: var(--text);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
@@ -49,7 +54,11 @@ a {
 }
 
 .navbar {
-  background: var(--bg-tertiary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--bg-tertiary) 70%, transparent);
+  backdrop-filter: blur(12px);
   border-bottom: var(--border-width) solid var(--border);
 }
 
@@ -62,6 +71,7 @@ a {
 .heroTitle {
   padding: 1rem 3rem;
   font-family: 'Nabla';
+  text-shadow: 0 0 40px color-mix(in srgb, var(--primary) 45%, transparent);
   font-size: min(5rem, 10vw);
   margin: 0;
 }
@@ -80,6 +90,28 @@ a {
     border-radius: var(--radius);
     text-decoration: none;
     color: var(--text-strong);
+    break-inside: avoid;
+    animation: rise 0.5s ease backwards;
+    animation-delay: calc(var(--i, 0) * 40ms);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 30px color-mix(in srgb, var(--primary) 30%, transparent);
+      outline: none;
+    }
+  }
+
+  .repoTitle .name {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .repoDescription {
+    color: var(--text);
+    opacity: 0.85;
   }
 
   p {
@@ -109,3 +141,32 @@ a {
 .stars { --badge: var(--warning); border-color: color-mix(in srgb, var(--warning) 40%, transparent); }
 .commits { --badge: var(--primary); border-color: color-mix(in srgb, var(--primary) 40%, transparent); }
 .license { --badge: var(--info); border-color: color-mix(in srgb, var(--info) 40%, transparent); }
+
+.sectionHeading {
+  margin: 2rem 4rem 0;
+  font-family: 'REM', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .repoCards a {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .heroTitle { padding: 1rem 1.25rem; }
+  .repoCards { padding: 1rem 0.5rem; }
+  .sectionHeading { margin-inline: 1.25rem; }
+}

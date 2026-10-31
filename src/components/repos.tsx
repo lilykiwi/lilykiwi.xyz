@@ -71,10 +71,11 @@ export function Repositories(): JSX.Element {
 
   return (
     <>
-      <div></div>
+      <h2 className="sectionHeading">repositories</h2>
       <div className="repoCards">
-        {fetchedData.value.map((repo: any) => (
+        {fetchedData.value.map((repo: any, i: number) => (
           <RepoCard
+            index={i}
             name={repo.name}
             description={repo.description}
             url={repo.url}
