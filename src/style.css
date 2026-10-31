@@ -21,8 +21,9 @@
     linear-gradient(
       90deg,
       color-mix(in oklab, var(--primary) 14%, transparent),
-      color-mix(in oklab, var(--secondary) 10%, transparent) 50%,
-      color-mix(in oklab, var(--info) 12%, transparent)
+      color-mix(in oklab, var(--secondary) 10%, transparent) 40%,
+      color-mix(in oklab, var(--info) 12%, transparent) 75%,
+      color-mix(in oklab, var(--warning) 9%, transparent)
     ),
     color-mix(in oklab, var(--bg-tertiary) 70%, transparent);
 }
