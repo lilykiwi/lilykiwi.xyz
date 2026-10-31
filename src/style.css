@@ -75,17 +75,67 @@ a {
 }
 
 .navbar-brand {
-  display: inline-block;
+  font-family: 'Nabla';
+  font-size: 1.5rem;
+  line-height: 1;
   text-decoration: none;
-  color: inherit;
+  color: var(--text-strong);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.stuck .navbar-brand {
+  opacity: 1;
+  transform: none;
+}
+
+.navbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3rem;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.25rem;
+  margin-left: auto;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--primary);
+    }
+  }
+}
+
+.sentinel {
+  height: 1px;
+  margin-bottom: -1px;
+}
+
+.hero {
+  padding: clamp(2rem, 8vw, 5rem) 3rem clamp(1.5rem, 5vw, 3rem);
 }
 
 .heroTitle {
-  padding: 1rem 3rem;
   font-family: 'Nabla';
-  text-shadow: 0 0 32px color-mix(in oklab, var(--primary) 18%, transparent);
   font-size: min(5rem, 10vw);
+  text-shadow: 0 0 32px color-mix(in oklab, var(--primary) 18%, transparent);
   margin: 0;
+}
+
+.heroTagline {
+  margin: 0.5rem 0 0;
+  font-family: 'REM', sans-serif;
+  font-size: 1.1rem;
+  color: var(--primary);
 }
 
 .repoCards {
@@ -186,6 +236,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .navbar-brand,
   .repoCards a {
     animation: none;
     transition: none;
@@ -193,8 +244,8 @@ a {
 }
 
 @media (max-width: 600px) {
-  .heroTitle {
-    padding: 1rem 1.25rem;
+  .hero {
+    padding-inline: 1.25rem;
   }
   .repoCards {
     padding: 1rem 0.5rem;
