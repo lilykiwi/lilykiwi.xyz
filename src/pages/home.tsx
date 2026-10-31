@@ -3,10 +3,10 @@ import { Navbar } from '../components/navbar';
 import { Repositories } from '../components/repos';
 import { Container } from '../components/container';
 import { Section } from '../components/section';
-import { Sidebar, SidebarItem, useScrollspy } from '../components/sidebar';
+import { MenuAnchor, SidebarItem, useScrollspy } from '../components/sidebar';
 
 import { JSX } from 'preact';
-import { useLayoutEffect, useRef } from 'preact/hooks';
+import { useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { PersonIcon, RepoIcon, ImageIcon } from '@primer/octicons-react';
 
@@ -54,6 +54,23 @@ export function Home(): JSX.Element {
     };
   }, []);
 
+  // the menu is a dropdown, so Escape or a click anywhere else dismisses it
+  useEffect(() => {
+    if (!menuOpen.value) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') menuOpen.value = false;
+    };
+    const onClick = (e: MouseEvent) => {
+      if (!(e.target as Element).closest('.menuButton, .menuPanel, .sectionMenu')) menuOpen.value = false;
+    };
+    window.addEventListener('keydown', onKey);
+    document.addEventListener('click', onClick);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.removeEventListener('click', onClick);
+    };
+  }, [menuOpen.value]);
+
   return <>
     <div ref={header} class={`siteHeader${stuck.value ? ' stuck' : ''}${titleGone.value ? ' titleGone' : ''}`}>
       <Hero />
@@ -67,7 +84,13 @@ export function Home(): JSX.Element {
     </div>
     <Container>
       <div class="layout">
-        <Sidebar items={sections} active={active.value} />
+        <MenuAnchor
+          items={sections}
+          active={active.value}
+          open={menuOpen.value}
+          onToggle={() => (menuOpen.value = !menuOpen.value)}
+          onClose={() => (menuOpen.value = false)}
+        />
         <main class="content">
           <Section id="about" title="about">
             {/* placeholder until there is something to say */}

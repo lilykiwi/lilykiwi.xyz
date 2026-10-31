@@ -1,6 +1,7 @@
 import { JSX } from 'preact';
 import { useLayoutEffect } from 'preact/hooks';
 import { useSignal, Signal } from '@preact/signals';
+import { ThreeBarsIcon, XIcon } from '@primer/octicons-react';
 
 export interface SidebarItem {
   id: string;
@@ -67,11 +68,29 @@ export function SectionLinks({ items, active, onNavigate }: {
 }
 
 /**
- * Sticky section list that sits under the nav strip. Below the desktop breakpoint it is replaced
- * by the hamburger menu in the navbar.
+ * Hamburger + dropdown that float in the gutter to the left of the centred content, just under the nav strip.
+ * They stay put while scrolling. When the viewport is too narrow for a gutter, the navbar's own button takes over.
  */
-export function Sidebar({ items, active }: { items: SidebarItem[]; active: string }): JSX.Element {
-  return <aside class="sidebar">
-    <SectionLinks items={items} active={active} />
-  </aside>;
+export function MenuAnchor({ items, active, open, onToggle, onClose }: {
+  items: SidebarItem[];
+  active: string;
+  open: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+}): JSX.Element {
+  return <div class="menuAnchor">
+    <button
+      type="button"
+      class="menuButton menuButtonGutter"
+      aria-label="Sections"
+      aria-expanded={open}
+      aria-controls="sectionPanel"
+      onClick={onToggle}
+    >
+      {open ? <XIcon /> : <ThreeBarsIcon />}
+    </button>
+    <div id="sectionPanel" class="menuPanel" hidden={!open}>
+      <SectionLinks items={items} active={active} onNavigate={onClose} />
+    </div>
+  </div>;
 }

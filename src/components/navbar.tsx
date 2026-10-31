@@ -1,5 +1,4 @@
 import { JSX } from 'preact';
-import { useEffect } from 'preact/hooks';
 import { HomeIcon, ImageIcon, ThreeBarsIcon, XIcon } from '@primer/octicons-react';
 import { Container } from './container';
 import { SectionLinks, SidebarItem } from './sidebar';
@@ -14,16 +13,10 @@ interface NavbarProps {
 
 /**
  * Strip below the hero. The brand fades in once the hero has scrolled away (see .siteHeader.titleGone).
- * Home and Gallery are stubs until those pages exist. On small screens a hamburger opens the section list.
+ * Home and Gallery are stubs until those pages exist. On narrow screens, where there's no gutter for the
+ * floating hamburger, this strip carries the button and a dropdown instead.
  */
 export function Navbar({ items, active, menuOpen, onMenuToggle, onMenuClose }: NavbarProps): JSX.Element {
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onMenuClose();
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [menuOpen]);
-
   return <>
     <nav class="navbar">
       <Container>

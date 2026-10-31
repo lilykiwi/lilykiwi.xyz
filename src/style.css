@@ -17,6 +17,7 @@
 
   --border-width: 2px;
   --radius: 16px;
+  --content-w: 64rem;
   --strip-h: calc(3rem + var(--border-width));
   /* painted once on .siteHeader, so the hero and nav strip share one surface */
   --header-bg:
@@ -304,16 +305,18 @@ a {
 
 /* sidebar + content */
 .layout {
-  display: grid;
-  grid-template-columns: 12rem minmax(0, 1fr);
-  gap: 2rem;
-  align-items: start;
+  position: relative;
+  max-width: var(--content-w);
+  margin-inline: auto;
   padding-top: 1.5rem;
 }
 
-.sidebar {
+/* zero-height sticky rail: the button and dropdown ride along under the strip without taking layout space */
+.menuAnchor {
   position: sticky;
-  top: calc(var(--strip-h) + 1.5rem);
+  top: calc(var(--strip-h) + 1rem);
+  z-index: 5;
+  height: 0;
 }
 
 .sectionLinks {
@@ -354,6 +357,28 @@ a {
 }
 
 /* hamburger + dropdown, only used when the sidebar is hidden */
+.menuButtonGutter {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 0.75rem);
+}
+
+.menuPanel {
+  position: absolute;
+  top: 2.75rem;
+  left: -3rem;
+  width: 13rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+  background: color-mix(in oklab, var(--bg-tertiary) 94%, transparent);
+  backdrop-filter: blur(12px);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
 .menuButton {
   display: none;
   align-items: center;
@@ -418,14 +443,18 @@ a {
   }
 }
 
-@media (max-width: 900px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr);
+/* content column plus a gutter either side for the button; below this the strip carries the menu instead */
+@media (min-width: 72rem) {
+  .menuButtonGutter {
+    display: inline-flex;
   }
-  .sidebar {
+}
+
+@media (max-width: 72rem) {
+  .menuAnchor {
     display: none;
   }
-  .menuButton {
+  .navbar .menuButton {
     display: inline-flex;
   }
   .sectionMenu:not([hidden]) {
