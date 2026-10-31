@@ -71,7 +71,6 @@ export function Repositories(): JSX.Element {
 
   return (
     <>
-      <h2 className="sectionHeading">repositories</h2>
       <div className="repoCards">
         {fetchedData.value.map((repo: any, i: number) => (
           <RepoCard

@@ -2,10 +2,20 @@ import { Hero } from '../components/hero';
 import { Navbar } from '../components/navbar';
 import { Repositories } from '../components/repos';
 import { Container } from '../components/container';
+import { Section } from '../components/section';
+import { Sidebar, SidebarItem } from '../components/sidebar';
 
 import { JSX } from 'preact';
 import { useLayoutEffect, useRef } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
+import { PersonIcon, RepoIcon, ImageIcon } from '@primer/octicons-react';
+
+// module-level so the sidebar's effect isn't torn down on every render
+const sections: SidebarItem[] = [
+  { id: 'about', label: 'about', icon: <PersonIcon /> },
+  { id: 'projects', label: 'projects', icon: <RepoIcon /> },
+  { id: 'gallery', label: 'gallery', icon: <ImageIcon /> },
+];
 
 /**
  * @todo: document this
@@ -48,7 +58,21 @@ export function Home(): JSX.Element {
       <Navbar />
     </div>
     <Container>
-      <Repositories />
+      <div class="layout">
+        <Sidebar items={sections} />
+        <main class="content">
+          <Section id="about" title="about">
+            {/* placeholder until there is something to say */}
+            <p class="placeholder">nothing here yet.</p>
+          </Section>
+          <Section id="projects" title="projects">
+            <Repositories />
+          </Section>
+          <Section id="gallery" title="gallery">
+            <p class="placeholder">coming eventually.</p>
+          </Section>
+        </main>
+      </div>
     </Container>
   </>;
 }
