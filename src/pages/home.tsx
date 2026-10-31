@@ -3,7 +3,7 @@ import { Navbar } from '../components/navbar';
 import { Repositories } from '../components/repos';
 import { Container } from '../components/container';
 import { Section } from '../components/section';
-import { Sidebar, SidebarItem } from '../components/sidebar';
+import { Sidebar, SidebarItem, useScrollspy } from '../components/sidebar';
 
 import { JSX } from 'preact';
 import { useLayoutEffect, useRef } from 'preact/hooks';
@@ -23,7 +23,9 @@ const sections: SidebarItem[] = [
 export function Home(): JSX.Element {
   const stuck = useSignal(false);
   const titleGone = useSignal(false);
+  const menuOpen = useSignal(false);
   const header = useRef<HTMLDivElement>(null);
+  const active = useScrollspy(sections);
 
   // The hero and nav strip live in one sticky block that is pulled up by the hero's height,
   // so only the strip stays pinned. That keeps them a single painted surface (no seam).
@@ -55,11 +57,17 @@ export function Home(): JSX.Element {
   return <>
     <div ref={header} class={`siteHeader${stuck.value ? ' stuck' : ''}${titleGone.value ? ' titleGone' : ''}`}>
       <Hero />
-      <Navbar />
+      <Navbar
+        items={sections}
+        active={active.value}
+        menuOpen={menuOpen.value}
+        onMenuToggle={() => (menuOpen.value = !menuOpen.value)}
+        onMenuClose={() => (menuOpen.value = false)}
+      />
     </div>
     <Container>
       <div class="layout">
-        <Sidebar items={sections} />
+        <Sidebar items={sections} active={active.value} />
         <main class="content">
           <Section id="about" title="about">
             {/* placeholder until there is something to say */}

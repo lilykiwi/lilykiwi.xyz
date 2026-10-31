@@ -314,13 +314,13 @@ a {
 .sidebar {
   position: sticky;
   top: calc(var(--strip-h) + 1.5rem);
+}
 
-  nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    border-left: var(--border-width) solid var(--border);
-  }
+.sectionLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-left: var(--border-width) solid var(--border);
 
   a {
     position: relative;
@@ -350,6 +350,40 @@ a {
         background: var(--primary);
       }
     }
+  }
+}
+
+/* hamburger + dropdown, only used when the sidebar is hidden */
+.menuButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  padding: 0.35rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--primary);
+  }
+}
+
+.sectionMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: 0.75rem 0;
+  background: color-mix(in oklab, var(--bg-tertiary) 94%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: var(--border-width) solid var(--border);
+
+  &[hidden] {
+    display: none;
   }
 }
 
@@ -390,6 +424,12 @@ a {
   }
   .sidebar {
     display: none;
+  }
+  .menuButton {
+    display: inline-flex;
+  }
+  .sectionMenu:not([hidden]) {
+    display: block;
   }
 }
 

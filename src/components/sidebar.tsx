@@ -1,6 +1,6 @@
 import { JSX } from 'preact';
 import { useLayoutEffect } from 'preact/hooks';
-import { useSignal } from '@preact/signals';
+import { useSignal, Signal } from '@preact/signals';
 
 export interface SidebarItem {
   id: string;
@@ -9,9 +9,9 @@ export interface SidebarItem {
 }
 
 /**
- * Sticky section list that sits under the nav strip and highlights the section being read (scrollspy).
+ * Tracks which section is being read (scrollspy). Shared by the sidebar and the mobile menu.
  */
-export function Sidebar({ items }: { items: SidebarItem[] }): JSX.Element {
+export function useScrollspy(items: SidebarItem[]): Signal<string> {
   const active = useSignal(items[0].id);
 
   useLayoutEffect(() => {
@@ -26,7 +26,7 @@ export function Sidebar({ items }: { items: SidebarItem[] }): JSX.Element {
         if (el && el.getBoundingClientRect().top <= line) current = item.id;
       }
 
-      // short final sections can never reach the line, so hand over once the page bottoms out
+      // short first/last sections can never own the line, so hand over at the page's ends
       const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
       const atTop = window.scrollY < 4;
       active.value = atBottom ? items[items.length - 1].id : atTop ? items[0].id : current;
@@ -41,17 +41,37 @@ export function Sidebar({ items }: { items: SidebarItem[] }): JSX.Element {
     };
   }, [items]);
 
+  return active;
+}
+
+/**
+ * The list of section links, with the current one marked.
+ */
+export function SectionLinks({ items, active, onNavigate }: {
+  items: SidebarItem[];
+  active: string;
+  onNavigate?: () => void;
+}): JSX.Element {
+  return <nav class="sectionLinks" aria-label="Sections">
+    {items.map((item) => (
+      <a
+        key={item.id}
+        href={`#${item.id}`}
+        aria-current={active === item.id ? 'location' : undefined}
+        onClick={onNavigate}
+      >
+        {item.icon} {item.label}
+      </a>
+    ))}
+  </nav>;
+}
+
+/**
+ * Sticky section list that sits under the nav strip. Below the desktop breakpoint it is replaced
+ * by the hamburger menu in the navbar.
+ */
+export function Sidebar({ items, active }: { items: SidebarItem[]; active: string }): JSX.Element {
   return <aside class="sidebar">
-    <nav aria-label="Sections">
-      {items.map((item) => (
-        <a
-          key={item.id}
-          href={`#${item.id}`}
-          aria-current={active.value === item.id ? 'location' : undefined}
-        >
-          {item.icon} {item.label}
-        </a>
-      ))}
-    </nav>
+    <SectionLinks items={items} active={active} />
   </aside>;
 }
