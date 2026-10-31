@@ -20,7 +20,7 @@ const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', mon
 
 <Base title={`${album.data.title} · lilykiwi.xyz`} description={album.data.description}>
   <header class="albumHeader">
-    <PageLink href="/gallery/" label="gallery" />
+    <PageLink href="/gallery/" label="gallery" icon="image" />
     <h1 class="sectionHeading">{album.data.title}</h1>
     <p class="postMeta">{format(album.data.date)} · {count(photos.length)}</p>
     {album.data.description && <p>{album.data.description}</p>}
