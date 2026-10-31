@@ -1,14 +1,19 @@
-// Generates src/components/icons.tsx from @primer/octicons (raw SVG data, no React dependency).
+// Generates src/components/icons.tsx from @primer/octicons (raw SVG data, no React dependency), plus brand marks
+// octicons lacks from simple-icons (CC0; the marks themselves remain their owners' trademarks).
 // Re-run after adding a name to `names`:  node scripts/gen-icons.cjs
 const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
 const octicons = require(path.join(root, 'node_modules/@primer/octicons'));
+const simple = require(path.join(root, 'node_modules/simple-icons'));
 
 const names = [
   'home', 'book', 'image', 'person', 'repo', 'repo-forked', 'archive', 'star-fill', 'law',
   'history', 'mark-github', 'mail', 'three-bars', 'x', 'arrow-left', 'arrow-right',
 ];
+
+// simple-icons slug -> export name; their marks sit on a 24-unit grid, so they are scaled into the 16-unit viewBox
+const brands = { bluesky: 'siBluesky' };
 
 const pascal = (n) => n.split('-').map((s) => s[0].toUpperCase() + s.slice(1)).join('') + 'Icon';
 
@@ -49,5 +54,12 @@ for (const n of names) {
   out += `export const ${pascal(n)} = make(${JSON.stringify(p)});\n`;
 }
 
+for (const [n, key] of Object.entries(brands)) {
+  const icon = simple[key];
+  if (!icon) throw new Error('missing brand icon ' + n);
+  out += `export const ${pascal(n)} = make(${JSON.stringify(`<path transform="scale(.6667)" d="${icon.path}"></path>`)});
+`;
+}
+
 fs.writeFileSync(path.join(root, 'src/components/icons.tsx'), out);
-console.log('wrote', names.length, 'icons');
+console.log('wrote', names.length + Object.keys(brands).length, 'icons');

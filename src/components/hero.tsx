@@ -1,5 +1,5 @@
 import type { JSX } from 'preact'
-import { MarkGithubIcon, MailIcon } from './icons'
+import { BlueskyIcon, MarkGithubIcon, MailIcon } from './icons'
 import { Title } from './heroTitle'
 
 /**
@@ -13,6 +13,9 @@ export function Hero(): JSX.Element {
       <div class="linkRow">
         <a href="https://github.com/lilykiwi" aria-label="GitHub">
           <MarkGithubIcon /> github
+        </a>
+        <a href="https://bsky.app/profile/lilykiwi.xyz" aria-label="Bluesky">
+          <BlueskyIcon /> bluesky
         </a>
         <a href="mailto:lily@lilykiwi.xyz" aria-label="Email">
           <MailIcon /> email

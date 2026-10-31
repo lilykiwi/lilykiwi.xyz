@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@primer/octicons": "^19.42.0",
+    "simple-icons": "^16.36.0",
     "typescript": "7.0.2"
   }
 }
