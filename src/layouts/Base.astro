@@ -1,0 +1,39 @@
+---
+import '../style.css';
+import { Shell } from '../components/Shell';
+import type { SidebarItem } from '../components/sidebar';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** show the large hero above the nav strip (home only) */
+  hero?: boolean;
+  /** sections for the floating menu and scrollspy; leave empty for pages that don't need one */
+  sections?: SidebarItem[];
+}
+
+const { title, description = 'lilykiwi.xyz', hero = false, sections = [] } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <style>
+      html {
+        background-color: #18191b;
+      }
+    </style>
+    <slot name="head" />
+  </head>
+  <body>
+    <Shell client:load path={path} hero={hero} sections={sections}>
+      <slot />
+    </Shell>
+  </body>
+</html>

@@ -1,9 +1,11 @@
-import { JSX } from 'preact';
-import { HomeIcon, ImageIcon, ThreeBarsIcon, XIcon } from '@primer/octicons-react';
+import type { JSX } from 'preact';
+import { BookIcon, HomeIcon, ImageIcon, ThreeBarsIcon, XIcon } from './icons';
 import { Container } from './container';
-import { SectionLinks, SidebarItem } from './sidebar';
+import { SectionLinks, type SidebarItem } from './sidebar';
 
 interface NavbarProps {
+  /** pathname of the page being shown, used to mark the current link */
+  path: string;
   items: SidebarItem[];
   active: string;
   menuOpen: boolean;
@@ -11,38 +13,53 @@ interface NavbarProps {
   onMenuClose: () => void;
 }
 
+const links = [
+  { href: '/', label: 'home', Icon: HomeIcon },
+  { href: '/blog/', label: 'blog', Icon: BookIcon },
+  { href: '/gallery/', label: 'gallery', Icon: ImageIcon },
+];
+
+const isCurrent = (href: string, path: string) => (href === '/' ? path === '/' : path.startsWith(href));
+
 /**
  * Strip below the hero. The brand fades in once the hero has scrolled away (see .siteHeader.titleGone).
- * Home and Gallery are stubs until those pages exist. On narrow screens, where there's no gutter for the
- * floating hamburger, this strip carries the button and a dropdown instead.
+ * On narrow screens, where there's no gutter for the floating hamburger, this strip carries the
+ * button and a dropdown of the page's sections instead. Pages without sections get neither.
  */
-export function Navbar({ items, active, menuOpen, onMenuToggle, onMenuClose }: NavbarProps): JSX.Element {
+export function Navbar({ path, items, active, menuOpen, onMenuToggle, onMenuClose }: NavbarProps): JSX.Element {
   return <>
     <nav class="navbar">
       <Container>
         <div class="navbarInner">
-          <button
-            type="button"
-            class="menuButton"
-            aria-label="Sections"
-            aria-expanded={menuOpen}
-            aria-controls="sectionMenu"
-            onClick={onMenuToggle}
-          >
-            {menuOpen ? <XIcon /> : <ThreeBarsIcon />}
-          </button>
-          <a class="navbar-brand" href="#">lilykiwi.xyz</a>
+          {items.length > 0 && (
+            <button
+              type="button"
+              class="menuButton"
+              aria-label="Sections"
+              aria-expanded={menuOpen}
+              aria-controls="sectionMenu"
+              onClick={onMenuToggle}
+            >
+              {menuOpen ? <XIcon /> : <ThreeBarsIcon />}
+            </button>
+          )}
+          <a class="navbar-brand" href="/">lilykiwi.xyz</a>
           <div class="linkRow">
-            <a href="#" aria-current="page"><HomeIcon /> home</a>
-            <a href="#gallery"><ImageIcon /> gallery</a>
+            {links.map(({ href, label, Icon }) => (
+              <a key={href} href={href} aria-current={isCurrent(href, path) ? 'page' : undefined}>
+                <Icon /> {label}
+              </a>
+            ))}
           </div>
         </div>
       </Container>
     </nav>
-    <div id="sectionMenu" class="sectionMenu" hidden={!menuOpen}>
-      <Container>
-        <SectionLinks items={items} active={active} onNavigate={onMenuClose} />
-      </Container>
-    </div>
+    {items.length > 0 && (
+      <div id="sectionMenu" class="sectionMenu" hidden={!menuOpen}>
+        <Container>
+          <SectionLinks items={items} active={active} onNavigate={onMenuClose} />
+        </Container>
+      </div>
+    )}
   </>;
 }

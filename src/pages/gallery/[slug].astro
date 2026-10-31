@@ -1,0 +1,40 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { getAlbums, getPhotos } from '../../lib/albums';
+
+export async function getStaticPaths() {
+  const albums = await getAlbums();
+  return albums.map((album) => ({ params: { slug: album.id }, props: { album } }));
+}
+
+const { album } = Astro.props;
+const photos = getPhotos(album);
+
+// full-size versions the thumbnails link to
+const full = await Promise.all(photos.map((p) => getImage({ src: p.image, width: 2000, format: 'webp' })));
+
+const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base title={`${album.data.title} · lilykiwi.xyz`} description={album.data.description}>
+  <header class="albumHeader">
+    <p><a href="/gallery/">← gallery</a></p>
+    <h1 class="sectionHeading">{album.data.title}</h1>
+    <p class="postMeta">{format(album.data.date)} · {photos.length} photos</p>
+    {album.data.description && <p>{album.data.description}</p>}
+  </header>
+
+  <ul class="photoGrid">
+    {
+      photos.map((photo, i) => (
+        <li>
+          <a href={full[i].src} title={photo.caption}>
+            <Image src={photo.image} alt={photo.alt} width={640} format="webp" loading="lazy" />
+          </a>
+          {photo.caption && <p class="caption">{photo.caption}</p>}
+        </li>
+      ))
+    }
+  </ul>
+</Base>

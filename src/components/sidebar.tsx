@@ -1,21 +1,30 @@
-import { JSX } from 'preact';
+import type { JSX } from 'preact';
 import { useLayoutEffect } from 'preact/hooks';
-import { useSignal, Signal } from '@preact/signals';
-import { ThreeBarsIcon, XIcon } from '@primer/octicons-react';
+import { useSignal, type Signal } from '@preact/signals';
+import { ImageIcon, PersonIcon, RepoIcon, ThreeBarsIcon, XIcon } from './icons';
+
+// Icons are referenced by name because island props from Astro have to be serialisable.
+const icons = {
+  person: PersonIcon,
+  repo: RepoIcon,
+  image: ImageIcon,
+};
 
 export interface SidebarItem {
   id: string;
   label: string;
-  icon: JSX.Element;
+  icon: keyof typeof icons;
 }
 
 /**
- * Tracks which section is being read (scrollspy). Shared by the sidebar and the mobile menu.
+ * Tracks which section is being read (scrollspy). Shared by the floating menu and the strip's dropdown.
  */
 export function useScrollspy(items: SidebarItem[]): Signal<string> {
-  const active = useSignal(items[0].id);
+  const active = useSignal(items[0]?.id ?? '');
 
   useLayoutEffect(() => {
+    if (!items.length) return;
+
     const update = () => {
       const stripBottom = document.querySelector<HTMLElement>('.navbar')?.getBoundingClientRect().bottom ?? 0;
       // a section becomes current once its top passes a line a little below the strip
@@ -54,21 +63,24 @@ export function SectionLinks({ items, active, onNavigate }: {
   onNavigate?: () => void;
 }): JSX.Element {
   return <nav class="sectionLinks" aria-label="Sections">
-    {items.map((item) => (
-      <a
-        key={item.id}
-        href={`#${item.id}`}
-        aria-current={active === item.id ? 'location' : undefined}
-        onClick={onNavigate}
-      >
-        {item.icon} {item.label}
-      </a>
-    ))}
+    {items.map((item) => {
+      const Icon = icons[item.icon];
+      return (
+        <a
+          key={item.id}
+          href={`#${item.id}`}
+          aria-current={active === item.id ? 'location' : undefined}
+          onClick={onNavigate}
+        >
+          <Icon /> {item.label}
+        </a>
+      );
+    })}
   </nav>;
 }
 
 /**
- * Hamburger + dropdown that float in the gutter to the left of the centred content, just under the nav strip.
+ * Hamburger + list that float in the gutter to the left of the centred content, just under the nav strip.
  * They stay put while scrolling. When the viewport is too narrow for a gutter, the navbar's own button takes over.
  */
 export function MenuAnchor({ items, active, open, onToggle, onClose }: {

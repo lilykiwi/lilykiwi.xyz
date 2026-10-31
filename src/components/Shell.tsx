@@ -1,31 +1,31 @@
-import { Hero } from '../components/hero';
-import { Navbar } from '../components/navbar';
-import { Repositories } from '../components/repos';
-import { Container } from '../components/container';
-import { Section } from '../components/section';
-import { MenuAnchor, SidebarItem, useScrollspy } from '../components/sidebar';
-
-import { JSX } from 'preact';
+import type { ComponentChildren, JSX } from 'preact';
 import { useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
-import { PersonIcon, RepoIcon, ImageIcon } from '@primer/octicons-react';
-
-// module-level so the sidebar's effect isn't torn down on every render
-const sections: SidebarItem[] = [
-  { id: 'about', label: 'about', icon: <PersonIcon /> },
-  { id: 'projects', label: 'projects', icon: <RepoIcon /> },
-  { id: 'gallery', label: 'gallery', icon: <ImageIcon /> },
-];
+import { Hero } from './hero';
+import { Navbar } from './navbar';
+import { Container } from './container';
+import { MenuAnchor, useScrollspy, type SidebarItem } from './sidebar';
 
 // widescreen = enough gutter beside the content for the floating menu (keep in sync with the 85rem media queries)
 const isWide = () => window.matchMedia('(min-width: 85rem)').matches;
 
+interface ShellProps {
+  /** pathname of the page, to mark the current nav link */
+  path: string;
+  /** show the big hero above the strip (home only) */
+  hero?: boolean;
+  /** the page's sections; drives the floating menu and scrollspy. Empty hides the menu */
+  sections?: SidebarItem[];
+  children?: ComponentChildren;
+}
+
 /**
- * @todo: document this
+ * The site chrome shared by every page: hero + sticky nav strip, and the section menu.
+ * The page body arrives as children.
  */
-export function Home(): JSX.Element {
+export function Shell({ path, hero = false, sections = [], children }: ShellProps): JSX.Element {
   const stuck = useSignal(false);
-  const titleGone = useSignal(false);
+  const titleGone = useSignal(!hero);
   const menuOpen = useSignal(false);
   const header = useRef<HTMLDivElement>(null);
   const active = useScrollspy(sections);
@@ -34,18 +34,18 @@ export function Home(): JSX.Element {
   // so only the strip stays pinned. That keeps them a single painted surface (no seam).
   useLayoutEffect(() => {
     const el = header.current;
-    const hero = el?.querySelector<HTMLElement>('.hero');
+    const heroEl = el?.querySelector<HTMLElement>('.hero');
     const title = el?.querySelector<HTMLElement>('.heroTitle');
-    if (!el || !hero || !title) return;
+    if (!el || !heroEl || !title) return;
 
-    const measure = () => el.style.setProperty('--hero-h', `${hero.offsetHeight}px`);
+    const measure = () => el.style.setProperty('--hero-h', `${heroEl.offsetHeight}px`);
     measure();
     const resize = new ResizeObserver(measure);
-    resize.observe(hero);
+    resize.observe(heroEl);
 
     // stuck once the hero has scrolled fully out of view; the strip's brand takes over as soon as the big title is gone
     const onScroll = () => {
-      stuck.value = window.scrollY >= hero.offsetHeight;
+      stuck.value = window.scrollY >= heroEl.offsetHeight;
       titleGone.value = title.getBoundingClientRect().bottom <= 0;
     };
     onScroll();
@@ -78,8 +78,9 @@ export function Home(): JSX.Element {
 
   return <>
     <div ref={header} class={`siteHeader${stuck.value ? ' stuck' : ''}${titleGone.value ? ' titleGone' : ''}`}>
-      <Hero />
+      {hero && <Hero />}
       <Navbar
+        path={path}
         items={sections}
         active={active.value}
         menuOpen={menuOpen.value}
@@ -89,28 +90,20 @@ export function Home(): JSX.Element {
     </div>
     <Container>
       <div class="layout">
-        <MenuAnchor
-          items={sections}
-          active={active.value}
-          open={menuOpen.value}
-          onToggle={() => (menuOpen.value = !menuOpen.value)}
-          onClose={() => {
-            if (!isWide()) menuOpen.value = false;
-          }}
-        />
-        <main class="content">
-          <Section id="about" title="about">
-            {/* placeholder until there is something to say */}
-            <p class="placeholder">nothing here yet.</p>
-          </Section>
-          <Section id="projects" title="projects">
-            <Repositories />
-          </Section>
-          <Section id="gallery" title="gallery">
-            <p class="placeholder">coming eventually.</p>
-          </Section>
-        </main>
+        {sections.length > 0 && (
+          <MenuAnchor
+            items={sections}
+            active={active.value}
+            open={menuOpen.value}
+            onToggle={() => (menuOpen.value = !menuOpen.value)}
+            onClose={() => {
+              if (!isWide()) menuOpen.value = false;
+            }}
+          />
+        )}
+        <main class="content">{children}</main>
       </div>
     </Container>
   </>;
 }
+export default Shell;

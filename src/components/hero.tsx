@@ -1,5 +1,5 @@
-import { JSX } from 'preact'
-import { MarkGithubIcon, MailIcon } from '@primer/octicons-react'
+import type { JSX } from 'preact'
+import { MarkGithubIcon, MailIcon } from './icons'
 import { Title } from './heroTitle'
 
 /**

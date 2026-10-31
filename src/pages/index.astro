@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { Repositories } from '../components/repos';
+import type { SidebarItem } from '../components/sidebar';
+
+const sections: SidebarItem[] = [
+  { id: 'about', label: 'about', icon: 'person' },
+  { id: 'projects', label: 'projects', icon: 'repo' },
+];
+---
+
+<Base title="lilykiwi.xyz" hero sections={sections}>
+  <link slot="head" rel="preload" as="fetch" href="https://api.github.com/users/lilykiwi/repos" crossorigin />
+
+  <section id="about" class="section">
+    <h2 class="sectionHeading">about</h2>
+    <!-- placeholder until there is something to say -->
+    <p class="placeholder">nothing here yet.</p>
+  </section>
+
+  <section id="projects" class="section">
+    <h2 class="sectionHeading">projects</h2>
+    <Repositories client:load />
+  </section>
+</Base>

@@ -5,8 +5,8 @@ import {
   StarIcon,
   LawIcon,
   HistoryIcon,
-} from '@primer/octicons-react'
-import { JSX } from 'preact'
+} from '../icons'
+import type { JSX } from 'preact'
 
 /**
  * @todo: document this

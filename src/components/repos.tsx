@@ -5,9 +5,9 @@ import {
   StarIcon,
   LawIcon,
   HistoryIcon,
-} from '@primer/octicons-react'
-import { JSX } from 'preact'
-import { useSignal, Signal } from '@preact/signals'
+} from './icons'
+import type { JSX } from 'preact'
+import { useSignal, type Signal } from '@preact/signals'
 import { useEffect } from 'preact/hooks'
 import { RepoCard } from './repos/repoCard'
 
