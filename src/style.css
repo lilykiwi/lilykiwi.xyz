@@ -146,6 +146,11 @@ a {
     color: var(--text);
     text-decoration: none;
 
+    /* centring boxes puts the icon a touch high against the text's lowercase body */
+    svg {
+      translate: 0 0.15em;
+    }
+
     &:hover {
       color: var(--primary);
     }
