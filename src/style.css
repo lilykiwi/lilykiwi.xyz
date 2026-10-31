@@ -374,6 +374,9 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .navbar-brand,
   .repoCards a {
     animation: none;
