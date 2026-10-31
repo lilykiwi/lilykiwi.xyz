@@ -369,11 +369,8 @@ a {
   /* flows leftwards from under the button, into the gutter, so it never covers the content */
   right: calc(100% + 0.75rem);
   width: max-content;
-  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
-  /* opaque and unblurred: a backdrop-filter layer made the fixed page gradient shift when it opened */
-  background: var(--bg-tertiary);
-  border: var(--border-width) solid var(--border);
-  border-radius: var(--radius);
+  /* deliberately unstyled: the list sits straight on the page background (no fill, border or blur,
+     the last of which also shifted the fixed page gradient when it appeared) */
 
   &[hidden] {
     display: none;
