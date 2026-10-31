@@ -17,6 +17,9 @@ const sections: SidebarItem[] = [
   { id: 'gallery', label: 'gallery', icon: <ImageIcon /> },
 ];
 
+// widescreen = enough gutter beside the content for the floating menu (keep in sync with the 85rem media queries)
+const isWide = () => window.matchMedia('(min-width: 85rem)').matches;
+
 /**
  * @todo: document this
  */
@@ -54,13 +57,15 @@ export function Home(): JSX.Element {
     };
   }, []);
 
-  // the menu is a dropdown, so Escape or a click anywhere else dismisses it
+  // Escape always closes the menu. Where it's a dropdown (narrow), a click elsewhere dismisses it too;
+  // on widescreen it acts like a sidebar and stays open until the button is pressed again.
   useEffect(() => {
     if (!menuOpen.value) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') menuOpen.value = false;
     };
     const onClick = (e: MouseEvent) => {
+      if (isWide()) return;
       if (!(e.target as Element).closest('.menuButton, .menuPanel, .sectionMenu')) menuOpen.value = false;
     };
     window.addEventListener('keydown', onKey);
@@ -89,7 +94,9 @@ export function Home(): JSX.Element {
           active={active.value}
           open={menuOpen.value}
           onToggle={() => (menuOpen.value = !menuOpen.value)}
-          onClose={() => (menuOpen.value = false)}
+          onClose={() => {
+            if (!isWide()) menuOpen.value = false;
+          }}
         />
         <main class="content">
           <Section id="about" title="about">

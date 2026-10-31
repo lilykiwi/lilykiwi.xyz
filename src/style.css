@@ -366,11 +366,12 @@ a {
 .menuPanel {
   position: absolute;
   top: 2.75rem;
-  left: -3rem;
-  width: 13rem;
+  /* flows leftwards from under the button, into the gutter, so it never covers the content */
+  right: calc(100% + 0.75rem);
+  width: max-content;
   padding: 0.5rem 0.5rem 0.5rem 0.75rem;
-  background: color-mix(in oklab, var(--bg-tertiary) 94%, transparent);
-  backdrop-filter: blur(12px);
+  /* opaque and unblurred: a backdrop-filter layer made the fixed page gradient shift when it opened */
+  background: var(--bg-tertiary);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
 
@@ -403,8 +404,7 @@ a {
   left: 0;
   right: 0;
   padding: 0.75rem 0;
-  background: color-mix(in oklab, var(--bg-tertiary) 94%, transparent);
-  backdrop-filter: blur(12px);
+  background: var(--bg-tertiary);
   border-bottom: var(--border-width) solid var(--border);
 
   &[hidden] {
@@ -443,14 +443,15 @@ a {
   }
 }
 
-/* content column plus a gutter either side for the button; below this the strip carries the menu instead */
-@media (min-width: 72rem) {
+/* content column plus a gutter either side wide enough for the button and the menu list;
+   below this the strip carries the button and a full-width dropdown instead (keep in sync with isWide in home.tsx) */
+@media (min-width: 85rem) {
   .menuButtonGutter {
     display: inline-flex;
   }
 }
 
-@media (max-width: 72rem) {
+@media (max-width: 85rem) {
   .menuAnchor {
     display: none;
   }
