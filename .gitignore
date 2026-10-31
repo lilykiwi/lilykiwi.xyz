@@ -1,7 +1,6 @@
-# yarn/node/rollup stuff
+# node stuff
 /node_modules
 /.yarn
-/.rollup.cache
 /.vscode
 
 # yarn configuration stuff
@@ -9,11 +8,16 @@
 #.pnp.cjs        | - removed in transition to yarn PnP
 #.pnp.loader.mjs |
 
-# build goes to /output
-/dist/**
-!dist/index.html
+# vite build output (deploy.sh copies it to the server)
+/dist
 
 # docs are built to /docs
 # comment this out to include them on the repo
 #/docs
 desktop.ini
+
+# astro
+/.astro
+
+# photo albums stay out of git (originals can be huge and carry location data);
+/src/content/albums/*/

@@ -1,0 +1,17 @@
+---
+import { ArrowRightIcon } from './icons';
+
+interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+---
+
+<div class="linkRow pageLinkRow">
+  <a href={href}>
+    {label}
+    <ArrowRightIcon />
+  </a>
+</div>

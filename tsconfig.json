@@ -1,39 +1,16 @@
 {
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "src/**/*"],
+  "exclude": ["dist"],
   "compilerOptions": {
-    "module": "ESNext",
     "jsx": "react-jsx",
-    "jsxImportSource": "preact",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "removeComments": true,
-    "skipLibCheck": true,
-    "baseUrl": "src/",
-    "rootDir": "./",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "paths": {
-      "react": [
-        "./node_modules/preact/compat/"
-      ],
-      "react-dom": [
-        "./node_modules/preact/compat/"
-      ]
-    }
+    "jsxImportSource": "preact"
   },
-  "include": [
-    "src"
-  ],
   "typedocOptions": {
-    "entryPoints": [
-      "src/index.tsx"
-    ],
+    "entryPoints": ["src/components/Shell.tsx"],
     "out": "docs",
     "gitRemote": "lilykiwi.xyz",
     "githubPages": false,
-    "readme": "none",
-  },
+    "readme": "none"
+  }
 }

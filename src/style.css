@@ -1,0 +1,729 @@
+:root {
+  color-scheme: dark;
+
+  --primary: #987ec0;
+  --secondary: #7e90c0;
+  --warning: #ffcd39;
+  --info: #9ec5fe;
+
+  --bg: #18191b;
+  --bg-secondary: #252729;
+  --bg-tertiary: #1e1f22;
+  --border: #2f3333;
+  --text: #dee2e6;
+  --text-strong: #fff;
+
+  --border-width: 2px;
+  --radius: 16px;
+  --content-w: 64rem;
+  --strip-h: calc(3rem + var(--border-width));
+  /* painted once on .siteHeader, so the hero and nav strip share one surface */
+  --header-bg:
+    radial-gradient(
+      ellipse 55% 140% at 8% 0%,
+      color-mix(in oklab, var(--primary) 30%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 45% 110% at 42% 100%,
+      color-mix(in oklab, var(--secondary) 14%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 120% at 78% 0%,
+      color-mix(in oklab, var(--info) 14%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 35% 90% at 100% 60%,
+      color-mix(in oklab, var(--warning) 10%, transparent),
+      transparent
+    ),
+    color-mix(in oklab, var(--bg-tertiary) 70%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* keep anchor targets clear of the pinned strip */
+  scroll-padding-top: calc(var(--strip-h) + 1rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  overflow-x: clip;
+  background:
+    radial-gradient(
+      60rem 30rem at 15% -10%,
+      color-mix(in oklab, var(--primary) 22%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50rem 28rem at 95% 0%,
+      color-mix(in oklab, var(--secondary) 16%, transparent),
+      transparent 70%
+    ),
+    var(--bg);
+  background-attachment: fixed;
+  min-height: calc(100vh + clamp(18rem, 45vh, 30rem));
+  color: var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--primary);
+}
+
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 12px;
+  max-width: 1320px;
+}
+
+/* site header: one sticky surface holding the hero and the nav strip */
+.siteHeader {
+  position: sticky;
+  /* --hero-h is set from the hero's height in home.tsx, so only the strip stays pinned */
+  top: calc(var(--hero-h, 0px) * -1);
+  z-index: 10;
+  background: var(--header-bg);
+}
+
+.siteHeader.stuck {
+  /* blur only once it overlays cards */
+  backdrop-filter: blur(12px);
+}
+
+/* hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: clamp(18rem, 45vh, 30rem);
+  padding: clamp(2rem, 8vw, 5rem) 3rem clamp(1.5rem, 5vw, 3rem);
+  max-width: 1420px;
+  margin-inline: auto;
+}
+
+.heroTitle {
+  font-family: 'Nabla';
+  font-size: min(5rem, 10vw);
+  text-shadow: 0 0 32px color-mix(in oklab, var(--primary) 18%, transparent);
+  margin: 0;
+}
+
+.heroTagline {
+  margin: 0.5rem 0 0;
+  font-family: 'REM', sans-serif;
+  font-size: 1.5rem;
+  color: var(--text-strong);
+}
+
+.hero .linkRow {
+  margin-top: 1.25rem;
+}
+
+/* nav strip */
+.navbar {
+  border-bottom: var(--border-width) solid var(--border);
+}
+
+.navbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3rem;
+}
+
+.navbar-brand {
+  font-family: 'Nabla';
+  font-size: 1.5rem;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--text-strong);
+  /* not clickable, focusable or announced until it's needed; visibility (unlike display) fades everywhere */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-4vh);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s;
+}
+
+.siteHeader.titleGone .navbar-brand {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+.linkRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text);
+    text-decoration: none;
+
+    /* centring boxes puts the icon a touch high against the text's lowercase body */
+    svg {
+      translate: 0 0.1em;
+    }
+
+    &:hover {
+      color: var(--primary);
+    }
+  }
+}
+
+.navbar .linkRow {
+  margin-left: auto;
+}
+
+/* drawn by a pseudo-element rather than text-decoration so it spans the icon too,
+   and rather than a border so it takes no space and the text stays on the same baseline as its neighbours */
+.navbar .linkRow a[aria-current='page'] {
+  position: relative;
+  color: var(--text-strong);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -0.1rem;
+    height: var(--border-width);
+    background: var(--primary);
+  }
+}
+
+.sectionMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: 0.75rem 0;
+  background: var(--bg-tertiary);
+  border-bottom: var(--border-width) solid var(--border);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+/* page layout and the floating section menu */
+/* sidebar + content */
+.layout {
+  position: relative;
+  max-width: var(--content-w);
+  margin-inline: auto;
+  padding-top: 1.5rem;
+}
+
+/* zero-height sticky rail: the button and dropdown ride along under the strip without taking layout space */
+.menuAnchor {
+  position: sticky;
+  top: calc(var(--strip-h) + 1rem);
+  z-index: 5;
+  height: 0;
+}
+
+.menuButton {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  padding: 0.35rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--primary);
+  }
+}
+
+/* hamburger + dropdown, only used when the sidebar is hidden */
+.menuButtonGutter {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 0.75rem);
+}
+
+.menuPanel {
+  position: absolute;
+  top: 2.75rem;
+  /* flows leftwards from under the button, into the gutter, so it never covers the content */
+  right: calc(100% + 0.75rem);
+  width: max-content;
+  /* deliberately unstyled: the list sits straight on the page background (no fill, border or blur,
+     the last of which also shifted the fixed page gradient when it appeared) */
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.sectionLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-left: var(--border-width) solid var(--border);
+
+  a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.9rem;
+    color: var(--text);
+    text-decoration: none;
+
+    svg {
+      translate: 0 0.1em;
+    }
+
+    &:hover {
+      color: var(--primary);
+    }
+
+    &[aria-current='location'] {
+      color: var(--text-strong);
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0 auto 0 calc(var(--border-width) * -1);
+        width: var(--border-width);
+        background: var(--primary);
+      }
+    }
+  }
+}
+
+/* home sections, in page order: about, blog, gallery, projects */
+.section {
+  padding-bottom: 3rem;
+}
+
+/* The last section fills the screen below the strip (same offset as html's scroll-padding-top), so it can be brought
+   to the top and, with the room it adds, so can every section above it, without gaps between sections. */
+.section:last-child {
+  min-height: calc(100vh - var(--strip-h) - 1rem);
+  min-height: calc(100dvh - var(--strip-h) - 1rem);
+}
+
+.sectionHeading {
+  margin: 0;
+  font-family: 'REM', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.placeholder {
+  margin: 0.75rem 0 0;
+  opacity: 0.6;
+}
+
+/* blog */
+.postList {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+
+  /* laid into the page rather than boxed: just a rule between entries */
+  li + li {
+    border-top: var(--border-width) solid var(--border);
+  }
+
+  a {
+    display: grid;
+    gap: 0.15rem;
+    padding: 1rem 0;
+    color: var(--text-strong);
+    text-decoration: none;
+
+    &:hover .postTitle,
+    &:focus-visible .postTitle {
+      color: var(--primary);
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  li:first-child a {
+    padding-top: 0.25rem;
+  }
+}
+
+.postTitle {
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.postSummary,
+.postMeta,
+time {
+  color: var(--text);
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+.postMeta {
+  margin: 0.25rem 0 0;
+}
+
+/* "see all" links: the nav strip's link style, on their own row at the right */
+.pageLinkRow {
+  margin: 1rem 0 0;
+  justify-content: flex-end;
+}
+
+/* gallery */
+.albumGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.albumCard {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: var(--bg-secondary);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-strong);
+  text-decoration: none;
+  position: relative;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+
+  /* holds the card's original bottom edge as the hover boundary, so the lift
+     doesn't uncover the cursor and retrigger the hover */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 calc(-1 * var(--border-width));
+    height: 8px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateY(4px);
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: calc(var(--radius) - 6px);
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    outline: none;
+  }
+}
+
+.albumTitle {
+  padding: 0.25rem 0.5rem 0;
+  font-weight: 600;
+}
+
+.albumMeta {
+  padding: 0 0.5rem 0.25rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+/* projects */
+.repoCards {
+  padding: 1rem 0;
+  columns: 4 240px;
+  column-gap: 1rem;
+
+  a {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 1rem;
+    padding: 0.5rem;
+    background: var(--bg-secondary);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text-strong);
+    break-inside: avoid;
+    position: relative;
+    animation: descend 0.5s ease backwards;
+    animation-delay: calc(var(--i, 0) * 40ms);
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    /* holds the card's original bottom edge as the hover boundary, so the lift
+       doesn't uncover the cursor and retrigger the hover */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: auto -1px calc(-1 * var(--border-width));
+      height: 16px;
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+      transform: translateY(6px);
+    }
+
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 30px
+        color-mix(in oklab, var(--primary) 30%, transparent);
+      outline: none;
+    }
+  }
+
+  .repoTitle .name {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .repoDescription {
+    color: var(--text);
+    opacity: 0.85;
+  }
+
+  p {
+    margin: 0.25rem;
+  }
+
+  span {
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  border: var(--border-width) solid var(--border);
+  border-radius: 50rem;
+  background: color-mix(in oklab, var(--badge, var(--border)) 20%, transparent);
+  color: var(--badge, var(--text));
+}
+
+.tag {
+  --badge: var(--text);
+}
+.stars {
+  --badge: var(--warning);
+  border-color: color-mix(in oklab, var(--warning) 40%, transparent);
+}
+.commits {
+  --badge: var(--primary);
+  border-color: color-mix(in oklab, var(--primary) 40%, transparent);
+}
+.license {
+  --badge: var(--info);
+  border-color: color-mix(in oklab, var(--info) 40%, transparent);
+}
+
+/* detail pages: a blog post, then a gallery album */
+.prose {
+  /*max-width: 44rem;*/
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  h2,
+  h3 {
+    margin: 2rem 0 0.5rem;
+    line-height: 1.3;
+  }
+
+  p,
+  ul,
+  ol {
+    margin: 1rem 0;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+  }
+
+  blockquote {
+    margin: 1rem 0;
+    padding-left: 1rem;
+    border-left: var(--border-width) solid var(--primary);
+    color: var(--text);
+    opacity: 0.85;
+  }
+
+  code {
+    padding: 0.1em 0.35em;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    font-size: 0.9em;
+  }
+
+  pre {
+    padding: 1rem;
+    overflow-x: auto;
+    background: var(--bg-secondary);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius);
+
+    code {
+      padding: 0;
+      background: none;
+    }
+  }
+}
+
+/* masonry: photos keep their own proportions and flow down the columns, two wide ones on desktop, one on narrow screens
+   (grid-template-rows: masonry isn't in Gecko yet; multi-column is, and reads top to bottom per column) */
+.photoGrid {
+  columns: 2 22rem;
+  column-gap: 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    break-inside: avoid;
+    margin: 0 0 1rem;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    border: var(--border-width) solid var(--border);
+  }
+
+  .caption {
+    margin: 0.25rem 0 0;
+    font-size: 0.85rem;
+    opacity: 0.75;
+  }
+}
+
+.albumHeader p {
+  margin: 0.25rem 0;
+}
+
+/* page transitions. The client router (see Base.astro) swaps pages inside a view transition so the swap is atomic,
+   but the transition's own snapshot animation is switched off: Gecko and Blink size those snapshots differently, which
+   flattened the hero in Gecko. The hero's grow/shrink is instead a real height animation on .siteHeader (script in
+   Base.astro). While it runs, the strip is glued to the bottom edge and the hero is cropped from the top. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-old(root) {
+  display: none;
+}
+
+.siteHeader[data-morph] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: clip;
+
+  /* full width, so the hero's auto side margins centre it as they do in normal flow instead of shrinking it to its content */
+  > * {
+    flex: none;
+    width: 100%;
+  }
+}
+
+@keyframes descend {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .navbar-brand,
+  .repoCards a {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* content column plus a gutter either side wide enough for the button and the menu list;
+   below this the strip carries the button and a full-width dropdown instead (keep in sync with isWide in home.tsx) */
+@media (min-width: 85rem) {
+  .menuButtonGutter {
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 85rem) {
+  .menuAnchor {
+    display: none;
+  }
+  .navbar .menuButton {
+    display: inline-flex;
+  }
+  .sectionMenu:not([hidden]) {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding-inline: 1.25rem;
+  }
+}

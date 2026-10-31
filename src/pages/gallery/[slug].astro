@@ -1,0 +1,45 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { count, getAlbums, getPhotos } from '../../lib/albums';
+
+export async function getStaticPaths() {
+  const albums = await getAlbums();
+  return albums.map((album) => ({ params: { slug: album.id }, props: { album } }));
+}
+
+const { album } = Astro.props;
+const photos = getPhotos(album);
+
+// full-size versions the thumbnails link to, with the long edge capped (not the width, which would make portraits much larger than landscapes)
+const LONG_EDGE = 3000;
+const full = await Promise.all(
+  photos.map(({ image }) => {
+    const width = image.width >= image.height ? LONG_EDGE : Math.round((LONG_EDGE * image.width) / image.height);
+    return getImage({ src: image, width, format: 'webp' });
+  }),
+);
+
+const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base title={`${album.data.title} · lilykiwi.xyz`} description={album.data.description} back={{ href: '/gallery/', label: 'gallery', icon: 'image' }}>
+  <header class="albumHeader">
+    <h1 class="sectionHeading">{album.data.title}</h1>
+    <p class="postMeta">{format(album.data.date)} · {count(photos.length)}</p>
+    {album.data.description && <p>{album.data.description}</p>}
+  </header>
+
+  <ul class="photoGrid">
+    {
+      photos.map((photo, i) => (
+        <li>
+          <a href={full[i].src} title={photo.caption}>
+            <Image src={photo.image} alt={photo.alt} width={1100} format="webp" loading="lazy" />
+          </a>
+          {photo.caption && <p class="caption">{photo.caption}</p>}
+        </li>
+      ))
+    }
+  </ul>
+</Base>

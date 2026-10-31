@@ -5,9 +5,9 @@ import {
   StarIcon,
   LawIcon,
   HistoryIcon,
-} from '@primer/octicons-react'
-import { JSX } from 'preact'
-import { useSignal, Signal } from '@preact/signals'
+} from './icons'
+import type { JSX } from 'preact'
+import { useSignal, type Signal } from '@preact/signals'
 import { useEffect } from 'preact/hooks'
 import { RepoCard } from './repos/repoCard'
 
@@ -71,10 +71,10 @@ export function Repositories(): JSX.Element {
 
   return (
     <>
-      <div></div>
       <div className="repoCards">
-        {fetchedData.value.map((repo: any) => (
+        {fetchedData.value.map((repo: any, i: number) => (
           <RepoCard
+            index={i}
             name={repo.name}
             description={repo.description}
             url={repo.url}

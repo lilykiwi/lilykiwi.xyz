@@ -10,36 +10,23 @@
     "email": "lily@lilykiwi.xyz"
   },
   "engines": {
-    "node": ">=10",
-    "pnpm": ">=3"
+    "node": ">=22",
+    "bun": ">=1.2"
   },
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "build-dev": "rollup --config rollup.config.dev.ts --configPlugin @rollup/plugin-typescript --watch",
-    "build": "rollup --config rollup.config.prod.ts --configPlugin @rollup/plugin-typescript",
-    "doc": "typedoc --plugin typedoc-plugin-markdown"
+    "dev": "astro dev",
+    "build": "astro sync && tsc --noEmit && astro build",
+    "preview": "astro preview",
+    "check": "astro sync && tsc --noEmit"
   },
   "dependencies": {
-    "@preact/signals": "^2.3.2",
-    "@primer/octicons-react": "^19.19.0",
-    "@rollup/plugin-alias": "^5.1.1",
-    "@rollup/plugin-node-resolve": "^16.0.2",
-    "@rollup/plugin-typescript": "^12.1.4",
-    "@rollup/plugin-url": "^8.0.2",
-    "@types/bootstrap": "^5.2.10",
-    "@types/node": "^24.7.1",
-    "bootstrap": "5.3.8",
-    "builtin-modules": "^5.0.0",
-    "preact": "^10.27.2",
-    "rollup": "^4.52.4",
-    "rollup-plugin-delete": "^3.0.1",
-    "rollup-plugin-scss": "^4.0.1",
-    "rollup-plugin-serve": "^3.0.0",
-    "sass": "^1.93.2",
-    "swiper": "^12.0.2",
-    "tslib": "^2.8.1",
-    "txtgen": "^3.0.7",
-    "typedoc-plugin-markdown": "^4.9.0",
-    "typescript": "^5.9.3"
+    "@astrojs/preact": "^6.1.1",
+    "@preact/signals": "^2.11.4",
+    "astro": "^7.4.4",
+    "preact": "11.1.1"
+  },
+  "devDependencies": {
+    "@primer/octicons": "^19.42.0",
+    "typescript": "7.0.2"
   }
 }

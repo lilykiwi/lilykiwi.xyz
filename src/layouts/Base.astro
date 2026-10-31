@@ -1,0 +1,86 @@
+---
+import '../style.css';
+import { ClientRouter } from 'astro:transitions';
+import { Shell } from '../components/Shell';
+import type { BackLink, SidebarItem } from '../components/sidebar';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** show the large hero above the nav strip (home only) */
+  hero?: boolean;
+  /** sections for the floating menu and scrollspy; leave empty for pages that don't need one */
+  sections?: SidebarItem[];
+  /** link to the parent page, shown where the hamburger would be on pages without sections */
+  back?: BackLink;
+}
+
+const { title, description = 'lilykiwi.xyz', hero = false, sections = [], back } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <style>
+      html {
+        background-color: #18191b;
+      }
+    </style>
+    <!-- fonts are linked here rather than @imported from the stylesheet: the router keeps identical head elements
+         across navigations, whereas an @import inside a swapped <style> is fetched again and the text flashes in fallback fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nabla&family=Prompt:wght@300&family=REM:wght@300&display=swap"
+    />
+    <!-- same-document view transitions (document.startViewTransition), so no cross-document @view-transition rule is needed -->
+    <ClientRouter />
+    <slot name="head" />
+  </head>
+  <body>
+    <Shell client:load path={path} hero={hero} sections={sections} back={back}>
+      <slot />
+    </Shell>
+    <script>
+      // Grows or shrinks the header when a navigation adds or removes the hero. This animates the real element
+      // (not the view transition's snapshots, which Gecko and Blink size differently), so every engine matches.
+      // Runs once: the router keeps module scripts alive across navigations.
+      const DURATION = 400;
+      const EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
+      const header = () => document.querySelector<HTMLElement>('.siteHeader');
+
+      // where the header's bottom edge is on screen (a pinned strip counts as just the strip), and the page body to fade
+      let from = 0;
+      document.addEventListener('astro:before-swap', () => {
+        from = header()?.getBoundingClientRect().bottom ?? 0;
+      });
+
+      // the new page is in place and scrolled to the top, still inside the transition's update callback
+      document.addEventListener('astro:after-swap', () => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const el = header();
+        if (!el) return;
+        const to = el.offsetHeight;
+        if (Math.abs(to - from) < 1) return;
+
+        el.dataset.morph = '';
+        // the shell reads scroll position to decide stuck/titleGone and pauses while morphing, so prod it once layout is real again
+        const done = () => {
+          delete el.dataset.morph;
+          window.dispatchEvent(new Event('scroll'));
+        };
+        el.animate({ height: [`${from}px`, `${to}px`] }, { duration: DURATION, easing: EASING }).finished.then(done, done);
+        document
+          .querySelector<HTMLElement>('.content')
+          ?.animate({ opacity: [0, 1] }, { duration: DURATION, easing: EASING });
+      });
+    </script>
+  </body>
+</html>

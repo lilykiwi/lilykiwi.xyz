@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import Sections from '../components/Sections.astro';
+import PostList from '../components/PostList.astro';
+import PageLink from '../components/PageLink.astro';
+import AlbumGrid from '../components/AlbumGrid.astro';
+import { Repositories } from '../components/repos';
+import type { SidebarItem } from '../components/sidebar';
+import { getPosts } from '../lib/posts';
+import { getAlbums } from '../lib/albums';
+
+// To reorder the page, reorder this list: it sets the order of the sections below AND of the menu.
+// To add a section, add an entry here and a matching <Fragment slot="id"> below.
+const sections: SidebarItem[] = [
+  { id: 'about', label: 'about', icon: 'person' },
+  { id: 'blog', label: 'blog', icon: 'book' },
+  { id: 'gallery', label: 'gallery', icon: 'image' },
+  { id: 'projects', label: 'projects', icon: 'repo' },
+];
+
+// the latest few of each; the full lists live on /blog/ and /gallery/
+const posts = await getPosts();
+const albums = await getAlbums();
+const POSTS_SHOWN = 5;
+const ALBUMS_SHOWN = 6;
+---
+
+<Base title="lilykiwi.xyz" hero sections={sections}>
+  <link slot="head" rel="preload" as="fetch" href="https://api.github.com/users/lilykiwi/repos" crossorigin />
+
+  <Sections sections={sections}>
+    <Fragment slot="about">
+      <!-- placeholder until there is something to say -->
+      <p class="placeholder">nothing here yet.</p>
+    </Fragment>
+
+    <Fragment slot="blog">
+      <PostList posts={posts.slice(0, POSTS_SHOWN)} />
+      {posts.length > POSTS_SHOWN && <PageLink href="/blog/" label="all posts" />}
+    </Fragment>
+
+    <Fragment slot="gallery">
+      <AlbumGrid albums={albums.slice(0, ALBUMS_SHOWN)} />
+      {albums.length > ALBUMS_SHOWN && <PageLink href="/gallery/" label="all albums" />}
+    </Fragment>
+
+    <Fragment slot="projects">
+      <Repositories client:load />
+    </Fragment>
+  </Sections>
+</Base>
