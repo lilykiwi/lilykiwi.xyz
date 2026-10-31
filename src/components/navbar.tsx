@@ -2,7 +2,7 @@ import { JSX } from 'preact';
 import { Container } from './container';
 import { Title } from './heroTitle';
 
-export function Navbar(links): JSX.Element {
+export function Navbar(): JSX.Element {
   return <nav class="navbar">
     <Container>
       <a class="navbar-brand" href="#">

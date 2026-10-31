@@ -9,7 +9,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "baseUrl": "src/",
     "lib": ["dom", "dom.iterable", "esnext"],
     "types": ["vite/client"]
   },
