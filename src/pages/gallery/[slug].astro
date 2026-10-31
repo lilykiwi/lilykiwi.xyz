@@ -11,8 +11,14 @@ export async function getStaticPaths() {
 const { album } = Astro.props;
 const photos = getPhotos(album);
 
-// full-size versions the thumbnails link to
-const full = await Promise.all(photos.map((p) => getImage({ src: p.image, width: 2000, format: 'webp' })));
+// full-size versions the thumbnails link to, with the long edge capped (not the width, which would make portraits much larger than landscapes)
+const LONG_EDGE = 3000;
+const full = await Promise.all(
+  photos.map(({ image }) => {
+    const width = image.width >= image.height ? LONG_EDGE : Math.round((LONG_EDGE * image.width) / image.height);
+    return getImage({ src: image, width, format: 'webp' });
+  }),
+);
 
 const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
@@ -29,7 +35,7 @@ const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', mon
       photos.map((photo, i) => (
         <li>
           <a href={full[i].src} title={photo.caption}>
-            <Image src={photo.image} alt={photo.alt} width={640} format="webp" loading="lazy" />
+            <Image src={photo.image} alt={photo.alt} width={1100} format="webp" loading="lazy" />
           </a>
           {photo.caption && <p class="caption">{photo.caption}</p>}
         </li>

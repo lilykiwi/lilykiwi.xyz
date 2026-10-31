@@ -404,8 +404,7 @@ time {
 }
 
 /* gallery */
-.albumGrid,
-.photoGrid {
+.albumGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   gap: 1rem;
@@ -625,7 +624,20 @@ time {
   }
 }
 
+/* masonry: photos keep their own proportions and flow down the columns, two wide ones on desktop, one on narrow screens
+   (grid-template-rows: masonry isn't in Gecko yet; multi-column is, and reads top to bottom per column) */
 .photoGrid {
+  columns: 2 22rem;
+  column-gap: 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    break-inside: avoid;
+    margin: 0 0 1rem;
+  }
+
   img {
     display: block;
     width: 100%;
