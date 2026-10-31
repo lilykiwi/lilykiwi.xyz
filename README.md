@@ -84,7 +84,9 @@ draft: true             # optional
 
 Every `jpg`, `jpeg`, `png`, `webp` or `avif` in the folder is included, sorted by file name (numerically, so `2.jpg` comes before `10.jpg`). Adding a photo is just dropping the file in.
 
-Photos are resized and converted to WebP when the site is built. This also drops embedded metadata such as GPS location. The original files are never published (check `dist/` if you want to be sure), but they are in git if you commit them, so think about repo size if you have a lot of full-resolution photos.
+Photos are resized and converted to WebP when the site is built. This also drops embedded metadata such as GPS location. The original files are never published (check `dist/` if you want to be sure).
+
+Album folders are listed in `.gitignore`, so photos are never committed by accident: they stay on the machine you build from, so keep your own backup of them. To commit one on purpose, use `git add -f src/content/albums/<name>`.
 
 ### Home page
 
