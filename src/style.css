@@ -472,6 +472,9 @@ time {
   background: var(--bg-secondary);
   border: var(--border-width) solid var(--border);
   box-shadow: 0 0 32px color-mix(in oklab, var(--primary) 22%, transparent);
+  /* the alt text paints in the image's text colour while it loads (or if it fails); the circle above is the placeholder,
+     so the text stays for screen readers but isn't shown */
+  color: transparent;
 }
 
 .specs {
