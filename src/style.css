@@ -488,6 +488,71 @@ time {
   }
 }
 
+/* avatars with the name underneath, in fixed-width tiles so a long name wraps within its own tile instead of stretching the row */
+.peopleList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.person {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.5rem;
+  width: 6rem;
+  color: var(--text-strong);
+  text-align: center;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+
+    .personName {
+      color: var(--primary);
+    }
+
+    .personAvatar {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.personAvatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: var(--border-width) solid var(--border);
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* stands in for a picture */
+.personInitial {
+  display: grid;
+  place-items: center;
+  background: var(--card-bg-color);
+  color: var(--primary);
+  font-family: 'REM', sans-serif;
+  font-size: 1.75rem;
+  text-transform: lowercase;
+}
+
+.personName {
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  transition: color 0.2s ease;
+}
+
 .specTitle {
   margin: 0 0 0.75rem;
   font-family: 'REM', sans-serif;

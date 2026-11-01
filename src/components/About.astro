@@ -1,11 +1,12 @@
 ---
+import { Image } from 'astro:assets';
 import { getEntry, render } from 'astro:content';
 
 // everything shown here lives in src/content/about/about.md
 const about = await getEntry('about', 'about');
 if (!about) throw new Error('src/content/about/about.md is missing');
 
-const { github, specs } = about.data;
+const { github, specs, people, peopleTitle } = about.data;
 const { Content } = await render(about);
 ---
 
@@ -43,4 +44,39 @@ const { Content } = await render(about);
     }
   </div>
 
+  {
+    people.length > 0 && (
+      <section class="people">
+        <h3 class="specTitle">{peopleTitle}</h3>
+        <ul class="peopleList">
+          {people.map(({ name, url, image }) => (
+            <li>
+              <a class="person" href={url} rel="noopener">
+                {typeof image === 'string' ? (
+                  /* hosted by the person, so it follows whatever they change it to; no referrer, so their site doesn't learn which page loaded it */
+                  <img
+                    class="personAvatar"
+                    src={image}
+                    alt=""
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                    decoding="async"
+                    referrerpolicy="no-referrer"
+                  />
+                ) : image ? (
+                  <Image class="personAvatar" src={image} alt="" width={144} height={144} format="webp" />
+                ) : (
+                  <span class="personAvatar personInitial" aria-hidden="true">
+                    {name.charAt(0)}
+                  </span>
+                )}
+                <span class="personName">{name}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 </div>

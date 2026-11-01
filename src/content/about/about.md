@@ -16,6 +16,19 @@ specs:
       base: Keychron K6
       switches: Gateron Yellows
       keycaps: boring stock
+people:
+  - name: emi
+    url: https://bsky.app/profile/did:plc:75st7fi4s2uxs7cqhy5e76n6
+    image: emi.webp
+  - name: amy
+    url: https://amyy.me/
+    image: amy.png
+  - name: wam
+    url: https://wamwoowam.co.uk
+    image: wam.png
+  - name: aspyn
+    url: https://aspyn.gay/
+    image: https://aspyn.gay/assets/favicon.png
 ---
 
 hi, i'm lily! i make things on computers and take photos sometimes.

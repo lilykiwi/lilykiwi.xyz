@@ -105,6 +105,15 @@ specs:
 A line or two about me.
 ```
 
+Below the spec cards is a "cool people i know !!" list, also from `about.md`. Each `people` entry takes a `name` and `url`, plus an optional `image`, and shows as a round avatar with the name underneath. The image is either a file next to `about.md` (say `someone.jpg`, referenced as `./someone.jpg`), resized and stripped of metadata at build time, or a link (`image: https://example.com/me.png`), which is loaded live from its own site so it follows whatever the person changes it to (it's sent without a referrer, and a link that breaks just shows an empty circle). Without one the card shows the name's first letter in a circle. The heading is `peopleTitle` (defaults to that text), and the whole section is hidden while `people` is empty:
+
+```md
+people:
+  - name: someone
+    url: https://example.com
+    image: ./someone.jpg
+```
+
 `src/pages/index.astro` lays out the sections, and the project list is fetched client-side from the GitHub API.
 
 ### Adding a page with sections

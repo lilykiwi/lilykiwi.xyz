@@ -51,12 +51,24 @@ const albums = defineCollection({
 /**
  * The home page's about section: the single file src/content/about/about.md. Its body is the bio,
  * `github` is the username the profile picture is pulled from, and `specs` are the gear cards
- * (each group's rows are label: value, shown in the order written).
+ * (each group's rows are label: value, shown in the order written). `people` are the links at the bottom: a name and
+ * a url, plus an optional picture (a file next to about.md, resized at build time, or a link to one hosted elsewhere).
  */
 const about = defineCollection({
   loader: glob({ pattern: 'about.md', base: './src/content/about' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     github: z.string(),
+    peopleTitle: z.string().default('cool people i know !!'),
+    people: z
+      .array(
+        z.object({
+          name: z.string(),
+          url: z.httpUrl(),
+          // a file next to about.md (resized at build time), or an http(s) link that's loaded live from its own site
+          image: image().or(z.httpUrl()).optional(),
+        }),
+      )
+      .default([]),
     specs: z
       .array(
         z.object({
