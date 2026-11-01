@@ -134,12 +134,26 @@ import Base from '../layouts/Base.astro';
 
 The available `icon` names are listed at the top of `src/components/sidebar.tsx`. Pages that don't pass `sections` get no menu button.
 
+### The title
+
+The "lilykiwi.xyz" title (in the hero and the nav strip) is a picture of the Nabla colour font, not text. Safari can't draw that font (it gets a black stand-in) and every browser would have to fetch it before the title showed. The pictures are in `public/` (`title-hero` and `title-brand`, each as AVIF and WebP, drawn at 4x the size they're shown at), and `src/components/titleImage.json` holds their sizes.
+
+To change the text, or if the title's font sizes in `style.css` change (`.heroTitle` and `.navbar-brand`), regenerate them:
+
+```sh
+node scripts/gen-title.cjs            # or: node scripts/gen-title.cjs "other text"
+```
+
+Then open the address it prints in **Chrome or Firefox** (it refuses to draw in a browser that can't do colour fonts). The page draws the title, the script trims and converts the pictures and writes `titleImage.json`, then exits.
+
 ## Project layout
 
 ```
 astro.config.mjs        Astro config (Preact integration, static output)
 deploy.sh               publishes dist/ as a new release on the server
 scripts/gen-icons.cjs   regenerates src/components/icons.tsx from @primer/octicons
+scripts/gen-title.cjs   regenerates the title pictures in public/ and src/components/titleImage.json (see "The title")
+public/                 the generated title pictures
 src/
   content.config.ts     schemas for the blog, albums and about collections
   content/
@@ -150,7 +164,7 @@ src/
   pages/                file-based routes: index, blog/, gallery/
   components/
     Shell.tsx           sticky header, scroll handling, section menu (hydrated in the browser)
-    hero.tsx            the large header (heroTitle.tsx is its title)
+    hero.tsx            the large header (heroTitle.tsx is its title, titleImage.tsx the title picture)
     navbar.tsx          the sticky link strip
     sidebar.tsx         scrollspy hook, section links and the floating hamburger
     repos.tsx           GitHub repository list (client-side fetch), repos/repoCard.tsx is one card

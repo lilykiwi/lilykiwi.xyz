@@ -38,8 +38,17 @@ const path = Astro.url.pathname;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Nabla&family=Prompt:wght@300&family=REM:wght@300&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Prompt:wght@300&family=REM:wght@300&display=swap"
     />
+    <!-- the title picture is what the page needs first, so start fetching it now instead of when the markup reaches it
+         (the type attribute makes browsers without AVIF skip this and use the WebP the <picture> falls back to) -->
+    {
+      hero ? (
+        <link rel="preload" as="image" href="/title-hero.avif" type="image/avif" fetchpriority="high" />
+      ) : (
+        <link rel="preload" as="image" href="/title-brand.avif" type="image/avif" />
+      )
+    }
     <!-- A reload or back/forward lands on a restored scroll position, so the cards' entrance animation is skipped
          (data-restored, see style.css): playing it there makes already-placed content slide in. The router replaces
          the root's attributes on each navigation, so clicking a link plays it as usual. -->

@@ -1,6 +1,7 @@
 import type { JSX } from 'preact';
 import { BookIcon, HomeIcon, ImageIcon, ThreeBarsIcon, XIcon } from './icons';
 import { Container } from './container';
+import { TitleImage } from './titleImage';
 import { BackButton, SectionLinks, type BackLink, type SidebarItem } from './sidebar';
 
 interface NavbarProps {
@@ -46,7 +47,7 @@ export function Navbar({ path, back, items, active, menuOpen, onMenuToggle, onMe
             </button>
           )}
           {items.length === 0 && back && <BackButton back={back} />}
-          <a class="navbar-brand" href="/">lilykiwi.xyz</a>
+          <a class="navbar-brand" href="/"><TitleImage text="lilykiwi.xyz" size="brand" /></a>
           <div class="linkRow">
             {links.map(({ href, label, Icon }) => (
               <a key={href} href={href} aria-label={label} aria-current={isCurrent(href, path) ? 'page' : undefined}>

@@ -129,16 +129,29 @@ a {
   margin-inline: auto;
 }
 
+/* The title is a picture (see titleImage.tsx), so it needs no font and looks the same in every browser. Its size is in
+   em, which makes the font-size here (and the strip brand's) the one knob that scales it. */
 .heroTitle {
-  font-family: 'Nabla';
   font-size: min(5rem, 10vw);
-  text-shadow: 0 0 32px color-mix(in oklab, var(--primary) 18%, transparent);
+  line-height: 1;
   margin: 0;
 }
 
-/* a link home that looks like plain title text (same as the strip's brand) */
+.titleImage {
+  display: block;
+  /* the pictures are the title drawn at 4x, trimmed to the letters; --title-em is their height in ems (titleImage.json) */
+  height: calc(var(--title-em, 1.04) * 1em);
+  width: auto;
+}
+
+.heroTitle .titleImage {
+  filter: drop-shadow(0 0 16px color-mix(in oklab, var(--primary) 18%, transparent));
+}
+
+/* a link home that looks like the plain title (same as the strip's brand) */
 .heroTitle a {
-  color: inherit;
+  display: block;
+  width: fit-content;
   text-decoration: none;
 }
 
@@ -166,11 +179,9 @@ a {
 }
 
 .navbar-brand {
-  font-family: 'Nabla';
   font-size: 1.5rem;
   line-height: 1;
   text-decoration: none;
-  color: var(--text-strong);
   /* not clickable, focusable or announced until it's needed; visibility (unlike display) fades everywhere */
   visibility: hidden;
   opacity: 0;
