@@ -6,7 +6,7 @@ import {
 } from './icons'
 import type { JSX } from 'preact'
 import { useSignal, type Signal } from '@preact/signals'
-import { useEffect } from 'preact/hooks'
+import { useEffect, useLayoutEffect, useRef } from 'preact/hooks'
 import { RepoCard } from './repos/repoCard'
 
 /**
@@ -30,10 +30,37 @@ interface repoData {
 }
 
 /**
+ * The cards are laid out in CSS columns, so their order in the markup runs down the first column and then the next,
+ * which would stagger the entrance column by column. This re-indexes them by where they sit (first of each column,
+ * then the second of each, left to right) so it reads row by row.
+ */
+function staggerByRow(grid: HTMLElement): void {
+  const items = [...grid.children] as HTMLElement[]
+  const left = (el: HTMLElement) => Math.round(el.getBoundingClientRect().left)
+  const columns = [...new Set(items.map(left))].sort((a, b) => a - b)
+  const rank = columns.map(() => 0)
+  for (const el of items) {
+    const c = columns.indexOf(left(el))
+    el.style.setProperty('--i', String(Math.min(rank[c]++ * columns.length + c, 12)))
+  }
+}
+
+/**
  * @todo: document this
  */
 export function Repositories(): JSX.Element {
   let fetchedData = useSignal([])
+  const grid = useRef<HTMLDivElement>(null)
+
+  // before paint, so the entrance starts with the right delays; the column count follows the width
+  useLayoutEffect(() => {
+    const el = grid.current
+    if (!el) return
+    staggerByRow(el)
+    const resize = new ResizeObserver(() => staggerByRow(el))
+    resize.observe(el)
+    return () => resize.disconnect()
+  }, [fetchedData.value.length])
 
   useEffect(() => {
     async function getData() {
@@ -69,7 +96,7 @@ export function Repositories(): JSX.Element {
 
   return (
     <>
-      <div className="repoCards">
+      <div className="repoCards" ref={grid}>
         {fetchedData.value.map((repo: any, i: number) => (
           <RepoCard
             index={i}

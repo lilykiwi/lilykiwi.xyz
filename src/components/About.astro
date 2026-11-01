@@ -28,8 +28,8 @@ const { Content } = await render(about);
 
   <div class="specs">
     {
-      specs.map(({ title, rows }) => (
-        <section class="specCard">
+      specs.map(({ title, rows }, i) => (
+        <section class="specCard" style={`--i: ${Math.min(i, 12)}`}>
           <h3 class="specTitle">{title}</h3>
           <dl>
             {Object.entries(rows).map(([label, value]) => (
@@ -49,9 +49,9 @@ const { Content } = await render(about);
       <section class="people">
         <h3 class="specTitle">{peopleTitle}</h3>
         <ul class="peopleList">
-          {people.map(({ name, url, image }) => (
+          {people.map(({ name, url, image }, i) => (
             <li>
-              <a class="person" href={url} rel="noopener">
+              <a class="person" href={url} rel="noopener" style={`--i: ${Math.min(i, 12)}`}>
                 {typeof image === 'string' ? (
                   /* hosted by the person, so it follows whatever they change it to; no referrer, so their site doesn't learn which page loaded it */
                   <img

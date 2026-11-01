@@ -423,6 +423,16 @@ time {
   opacity: 0.6;
 }
 
+/* every kind of card eases in on load, staggered by the --i index its markup gives it */
+.specCard,
+.albumCard,
+.person,
+.photoGrid li,
+.repoCards a {
+  animation: descend 0.5s ease backwards;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+
 /* cards sit on a darker base than the page (the popup shares it, and adds its own glow and blur since it overlaps content) */
 .specCard,
 .albumCard,
@@ -706,8 +716,6 @@ time {
     color: var(--text-strong);
     break-inside: avoid;
     position: relative;
-    animation: descend 0.5s ease backwards;
-    animation-delay: calc(var(--i, 0) * 40ms);
     transition:
       transform 0.2s ease,
       border-color 0.2s ease,
@@ -922,6 +930,10 @@ time {
     scroll-behavior: auto;
   }
   .navbar-brand,
+  .specCard,
+  .albumCard,
+  .person,
+  .photoGrid li,
   .repoCards a,
   .sectionMenu,
   .sectionMenu.open .sectionLinks a {

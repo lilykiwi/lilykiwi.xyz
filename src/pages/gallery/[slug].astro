@@ -33,7 +33,7 @@ const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', mon
   <ul class="photoGrid">
     {
       photos.map((photo, i) => (
-        <li>
+        <li style={`--i: ${Math.min(i, 12)}`}>
           <a href={full[i].src} title={photo.caption}>
             <Image src={photo.image} alt={photo.alt} width={1100} format="webp" loading="lazy" />
           </a>
@@ -42,4 +42,27 @@ const format = (d: Date) => d.toLocaleDateString('en-GB', { year: 'numeric', mon
       ))
     }
   </ul>
+  <!-- The grid is CSS columns, so the markup order runs down the left column and then the right one, which would
+       stagger the entrance column by column. This re-indexes the photos by where they sit (first of each column, then the
+       second of each, left to right) so the entrance reads row by row. Runs before first paint; without it, the
+       server-rendered markup order is the fallback. The router only re-runs inline scripts marked data-astro-rerun. -->
+  <script is:inline data-astro-rerun>
+    (() => {
+      const grid = document.querySelector('.photoGrid');
+      if (!grid) return;
+      const place = () => {
+        const items = [...grid.children];
+        const left = (li) => Math.round(li.getBoundingClientRect().left);
+        const cols = [...new Set(items.map(left))].sort((a, b) => a - b);
+        const rank = cols.map(() => 0);
+        for (const li of items) {
+          const c = cols.indexOf(left(li));
+          li.style.setProperty('--i', Math.min(rank[c]++ * cols.length + c, 12));
+        }
+      };
+      place();
+      // the column count follows the width; tied to the grid so it goes away with the page
+      new ResizeObserver(place).observe(grid);
+    })();
+  </script>
 </Base>
