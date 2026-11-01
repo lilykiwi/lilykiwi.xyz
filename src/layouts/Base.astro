@@ -40,6 +40,15 @@ const path = Astro.url.pathname;
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Nabla&family=Prompt:wght@300&family=REM:wght@300&display=swap"
     />
+    <!-- A reload or back/forward lands on a restored scroll position, so the cards' entrance animation is skipped
+         (data-restored, see style.css): playing it there makes already-placed content slide in. The router replaces
+         the root's attributes on each navigation, so clicking a link plays it as usual. -->
+    <script is:inline>
+      {
+        const nav = performance.getEntriesByType('navigation')[0];
+        if (nav && nav.type !== 'navigate') document.documentElement.dataset.restored = '';
+      }
+    </script>
     <!-- same-document view transitions (document.startViewTransition), so no cross-document @view-transition rule is needed -->
     <ClientRouter />
     <slot name="head" />
@@ -48,6 +57,32 @@ const path = Astro.url.pathname;
     <Shell client:load path={path} hero={hero} sections={sections} back={back}>
       <slot />
     </Shell>
+    <!-- The sticky header is pulled up by the hero's height (--hero-h) so only the strip stays pinned, but the Shell only
+         sets that once it has hydrated; until then the whole hero would sit pinned over the page. Setting it here, while
+         the markup is parsed, means it is right from the first paint (the Shell keeps it up to date afterwards).
+         data-astro-rerun: the router only re-runs inline scripts that ask for it. -->
+    <script is:inline data-astro-rerun>
+      {
+        const header = document.querySelector('.siteHeader');
+        const hero = header && header.querySelector('.hero');
+        if (hero) header.style.setProperty('--hero-h', hero.offsetHeight + 'px');
+      }
+    </script>
+    <!-- Astro turns the browser's own scroll restoration off and restores the position itself, but only once its script
+         has loaded, so a reload would first paint at the top and then jump down. The position it saved is in
+         history.state, and the markup above is complete by now, so restore it here, before the first paint (Astro's own
+         restore later lands on the same spot). Only for a reload or back/forward into this document, and not re-run on
+         router navigations, which handle their own scrolling. -->
+    <script is:inline>
+      {
+        const nav = performance.getEntriesByType('navigation')[0];
+        const state = history.state;
+        // instant: the page's scroll-behavior is smooth, which would animate this from the top
+        if (nav && nav.type !== 'navigate' && state && state.scrollY) {
+          scrollTo({ left: state.scrollX || 0, top: state.scrollY, behavior: 'instant' });
+        }
+      }
+    </script>
     <script>
       // Grows or shrinks the header when a navigation adds or removes the hero. This animates the real element
       // (not the view transition's snapshots, which Gecko and Blink size differently), so every engine matches.
