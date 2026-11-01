@@ -29,6 +29,18 @@ people:
   - name: aspyn
     url: https://aspyn.gay/
     image: https://aspyn.gay/assets/favicon.png
+  - name: dom
+    url: https://ytjobs.co/@skeledom
+    image: dom.png
+  - name: jade!!
+    url: https://bsky.app/profile/jdsammy.bsky.social
+    image: jade2.png
+  - name: gwen
+    url: https://www.tumblr.com/purplemirrorart
+    image: gwen.jpg
+  - name: ivy
+    url: https://bsky.app/profile/itsourivy.bsky.social
+    image: ivy.png
 ---
 
 hi, i'm lily! i make things on computers and take photos sometimes.
