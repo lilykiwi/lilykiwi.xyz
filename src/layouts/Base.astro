@@ -56,6 +56,25 @@ const path = Astro.url.pathname;
       const EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
       const header = () => document.querySelector<HTMLElement>('.siteHeader');
 
+      // The router only treats a link to the current page as a no-op when it has a #hash; a plain one would fetch the
+      // identical page and swap it in, remounting every island (the repo list refetches from GitHub, etc.). Claim those
+      // clicks first (capture phase; the router skips default-prevented ones) and just scroll back to the top.
+      document.addEventListener(
+        'click',
+        (ev) => {
+          if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+          const link = (ev.target as Element).closest<HTMLAnchorElement>('a[href]');
+          if (!link || (link.target && link.target !== '_self') || link.hasAttribute('download')) return;
+          const to = new URL(link.href, location.href);
+          if (to.origin !== location.origin || to.pathname !== location.pathname || to.search !== location.search || to.hash) return;
+          ev.preventDefault();
+          // drop a leftover #section from the address, keeping the router's own history state
+          if (location.hash) history.replaceState(history.state, '', to.pathname + to.search);
+          window.scrollTo({ top: 0 });
+        },
+        true,
+      );
+
       // where the header's bottom edge is on screen (a pinned strip counts as just the strip), and the page body to fade
       let from = 0;
       document.addEventListener('astro:before-swap', () => {
