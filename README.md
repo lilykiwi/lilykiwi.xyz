@@ -23,7 +23,7 @@
 
 This is the source code for my personal website, [lilykiwi.xyz](https://lilykiwi.xyz). It's built with [Astro](https://astro.build) into a fully static site, with [Preact](https://preactjs.com) for the interactive bits (the header and section menu, and the GitHub repository list), plain CSS for styling, and [Bun](https://bun.sh) as the package manager.
 
-Pages are driven by content on disk: blog posts are markdown files and photo albums are folders of images.
+Pages are driven by content on disk: blog posts are markdown files, photo albums are folders of images, and the about section is one markdown file.
 
 ## Usage
 
@@ -90,7 +90,22 @@ Album folders are listed in `.gitignore`, so photos are never committed by accid
 
 ### Home page
 
-`src/pages/index.astro` holds the "about" section (currently a placeholder) and the project list, which is fetched client-side from the GitHub API.
+The "about" section is driven by one file, `src/content/about/about.md`. Its body is the bio, `github` is the username the profile picture is pulled from, and `specs` are the gear cards (each group's rows are `label: value`, shown in the order written):
+
+```md
+---
+github: lilykiwi
+specs:
+  - title: pc
+    rows:
+      cpu: Ryzen 7 7800X3D
+      gpu: RTX 4070
+---
+
+A line or two about me.
+```
+
+`src/pages/index.astro` lays out the sections, and the project list is fetched client-side from the GitHub API.
 
 ### Adding a page with sections
 
@@ -117,10 +132,11 @@ astro.config.mjs        Astro config (Preact integration, static output)
 deploy.sh               publishes dist/ as a new release on the server
 scripts/gen-icons.cjs   regenerates src/components/icons.tsx from @primer/octicons
 src/
-  content.config.ts     schemas for the blog and albums collections
+  content.config.ts     schemas for the blog, albums and about collections
   content/
     blog/               markdown posts
     albums/             one folder per album
+    about/about.md      the home page's bio, avatar username and spec cards
   layouts/Base.astro    <head>, global CSS, wraps every page in the Shell
   pages/                file-based routes: index, blog/, gallery/
   components/
@@ -131,7 +147,7 @@ src/
     repos.tsx           GitHub repository list (client-side fetch), repos/repoCard.tsx is one card
     container.tsx       centred page-width wrapper
     icons.tsx           generated SVG icons
-    *.astro             server-rendered pieces: AlbumGrid, PostList, PageLink, Sections
+    *.astro             server-rendered pieces: About, AlbumGrid, PostList, PageLink, Sections
   lib/albums.ts         finds the photos in each album folder
   lib/posts.ts          published blog posts, newest first
   style.css             all styles

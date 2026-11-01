@@ -48,4 +48,24 @@ const albums = defineCollection({
   }),
 });
 
-export const collections = { blog, albums };
+/**
+ * The home page's about section: the single file src/content/about/about.md. Its body is the bio,
+ * `github` is the username the profile picture is pulled from, and `specs` are the gear cards
+ * (each group's rows are label: value, shown in the order written).
+ */
+const about = defineCollection({
+  loader: glob({ pattern: 'about.md', base: './src/content/about' }),
+  schema: z.object({
+    github: z.string(),
+    specs: z
+      .array(
+        z.object({
+          title: z.string(),
+          rows: z.record(z.string(), z.string()),
+        }),
+      )
+      .default([]),
+  }),
+});
+
+export const collections = { blog, albums, about };

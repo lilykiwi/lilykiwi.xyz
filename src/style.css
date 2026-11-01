@@ -418,9 +418,83 @@ time {
 }
 
 /* cards sit on a darker base than the page (the popup shares it, and adds its own glow and blur since it overlaps content) */
+.specCard,
 .albumCard,
 .repoCards a {
   background-color: var(--card-bg-color);
+}
+
+/* about */
+.about {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* bio on the left, the picture right-aligned in its own column */
+.aboutIntro {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.aboutBio p {
+  margin: 0 0 0.75rem;
+  text-transform: lowercase;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.avatar {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-secondary);
+  border: var(--border-width) solid var(--border);
+  box-shadow: 0 0 32px color-mix(in oklab, var(--primary) 22%, transparent);
+}
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1rem;
+}
+
+.specCard {
+  padding: 1rem 1.25rem;
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.35rem 1rem;
+    margin: 0;
+  }
+
+  dt {
+    color: var(--text);
+    opacity: 0.7;
+    text-transform: lowercase;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text-strong);
+  }
+}
+
+.specTitle {
+  margin: 0 0 0.75rem;
+  font-family: 'REM', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: lowercase;
+  color: var(--primary);
 }
 
 /* blog */
@@ -808,6 +882,14 @@ time {
 @media (max-width: 600px) {
   .hero {
     padding-inline: 1.25rem;
+  }
+
+  .aboutIntro {
+    gap: 1rem;
+  }
+  .avatar {
+    width: 5.5rem;
+    height: 5.5rem;
   }
 
   /* the strip can't fit its links beside the brand and button: where there's a hamburger they move into its menu,

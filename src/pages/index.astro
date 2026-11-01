@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Sections from '../components/Sections.astro';
+import About from '../components/About.astro';
 import PostList from '../components/PostList.astro';
 import PageLink from '../components/PageLink.astro';
 import AlbumGrid from '../components/AlbumGrid.astro';
@@ -30,8 +31,7 @@ const ALBUMS_SHOWN = 6;
 
   <Sections sections={sections}>
     <Fragment slot="about">
-      <!-- placeholder until there is something to say -->
-      <p class="placeholder">nothing here yet.</p>
+      <About />
     </Fragment>
 
     <Fragment slot="blog">

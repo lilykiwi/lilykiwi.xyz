@@ -1,0 +1,46 @@
+---
+import { getEntry, render } from 'astro:content';
+
+// everything shown here lives in src/content/about/about.md
+const about = await getEntry('about', 'about');
+if (!about) throw new Error('src/content/about/about.md is missing');
+
+const { github, specs } = about.data;
+const { Content } = await render(about);
+---
+
+<div class="about">
+  <div class="aboutIntro">
+    <div class="aboutBio">
+      <Content />
+    </div>
+    <!-- pulled live from github, so it follows the profile picture there -->
+    <img
+      class="avatar"
+      src={`https://github.com/${github}.png?size=256`}
+      alt={`${github}'s profile picture`}
+      width="128"
+      height="128"
+      decoding="async"
+    />
+  </div>
+
+  <div class="specs">
+    {
+      specs.map(({ title, rows }) => (
+        <section class="specCard">
+          <h3 class="specTitle">{title}</h3>
+          <dl>
+            {Object.entries(rows).map(([label, value]) => (
+              <>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </>
+            ))}
+          </dl>
+        </section>
+      ))
+    }
+  </div>
+
+</div>
