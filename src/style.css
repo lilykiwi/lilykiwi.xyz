@@ -231,6 +231,11 @@ a {
   height: 0;
 }
 
+/* pages, shown instead of the sections only where the strip has dropped its own links */
+.sectionLinks.menuPages {
+  display: none;
+}
+
 /* floating card with the header's blur; the clip-path reveals it downwards out of the strip */
 .sectionMenu {
   position: absolute;
@@ -353,7 +358,8 @@ a {
       color: var(--primary);
     }
 
-    &[aria-current='location'] {
+    &[aria-current='location'],
+    &[aria-current='page'] {
       color: var(--text-strong);
 
       &::before {
@@ -798,5 +804,23 @@ time {
 @media (max-width: 600px) {
   .hero {
     padding-inline: 1.25rem;
+  }
+
+  /* the strip can't fit its links beside the brand and button: where there's a hamburger they move into its menu,
+     elsewhere they drop their labels */
+  .navbar.hasMenu .linkRow {
+    display: none;
+  }
+  .sectionLinks.menuPages {
+    display: flex;
+  }
+  .sectionMenu .sectionLinks:not(.menuPages) {
+    display: none;
+  }
+  .navbar .linkLabel {
+    display: none;
+  }
+  .navbar .linkRow {
+    gap: 0.75rem;
   }
 }

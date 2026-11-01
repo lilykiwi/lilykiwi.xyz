@@ -30,7 +30,7 @@ const isCurrent = (href: string, path: string) => (href === '/' ? path === '/' :
  */
 export function Navbar({ path, back, items, active, menuOpen, onMenuToggle, onMenuClose }: NavbarProps): JSX.Element {
   return <>
-    <nav class="navbar">
+    <nav class={`navbar${items.length > 0 ? ' hasMenu' : ''}`}>
       <Container>
         <div class="navbarInner">
           {items.length > 0 && (
@@ -49,8 +49,8 @@ export function Navbar({ path, back, items, active, menuOpen, onMenuToggle, onMe
           <a class="navbar-brand" href="/">lilykiwi.xyz</a>
           <div class="linkRow">
             {links.map(({ href, label, Icon }) => (
-              <a key={href} href={href} aria-current={isCurrent(href, path) ? 'page' : undefined}>
-                <Icon /> {label}
+              <a key={href} href={href} aria-label={label} aria-current={isCurrent(href, path) ? 'page' : undefined}>
+                <Icon /> <span class="linkLabel">{label}</span>
               </a>
             ))}
           </div>
@@ -65,10 +65,18 @@ export function Navbar({ path, back, items, active, menuOpen, onMenuToggle, onMe
  * blurs what's behind it once stuck, which would make it the backdrop root and stop a nested blur from reaching the page.
  * Always mounted so opening can animate; closed, it's visibility:hidden so it's out of the tab order and the a11y tree.
  */
-export function SectionMenu({ items, active, menuOpen, onMenuClose }: Pick<NavbarProps, 'items' | 'active' | 'menuOpen' | 'onMenuClose'>): JSX.Element | null {
+export function SectionMenu({ path, items, active, menuOpen, onMenuClose }: Pick<NavbarProps, 'path' | 'items' | 'active' | 'menuOpen' | 'onMenuClose'>): JSX.Element | null {
   if (items.length === 0) return null;
   return <div class="sectionMenuRail">
     <div id="sectionMenu" class={`sectionMenu${menuOpen ? ' open' : ''}`}>
+      {/* where the strip has no room for its links (see .hasMenu), they replace the page's sections here */}
+      <nav class="sectionLinks menuPages" aria-label="Pages">
+        {links.map(({ href, label, Icon }, i) => (
+          <a key={href} href={href} style={{ '--i': i }} aria-current={isCurrent(href, path) ? 'page' : undefined} onClick={onMenuClose}>
+            <Icon /> {label}
+          </a>
+        ))}
+      </nav>
       <SectionLinks items={items} active={active} onNavigate={onMenuClose} />
     </div>
   </div>;

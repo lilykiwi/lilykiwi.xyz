@@ -119,7 +119,7 @@ export function Shell({ path, hero = false, sections = [], back, children }: She
         onMenuClose={() => (menuOpen.value = false)}
       />
     </div>
-    <SectionMenu items={sections} active={active.value} menuOpen={menuOpen.value} onMenuClose={() => (menuOpen.value = false)} />
+    <SectionMenu path={path} items={sections} active={active.value} menuOpen={menuOpen.value} onMenuClose={() => (menuOpen.value = false)} />
     <Container>
       <div class="layout">
         {sections.length > 0 && (
