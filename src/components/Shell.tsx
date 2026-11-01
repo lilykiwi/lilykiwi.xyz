@@ -2,7 +2,7 @@ import type { ComponentChildren, JSX } from 'preact';
 import { useEffect, useLayoutEffect, useRef } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { Hero } from './hero';
-import { Navbar } from './navbar';
+import { Navbar, SectionMenu } from './navbar';
 import { Container } from './container';
 import { BackButton, MenuAnchor, useScrollspy, type BackLink, type SidebarItem } from './sidebar';
 
@@ -71,6 +71,22 @@ export function Shell({ path, hero = false, sections = [], back, children }: She
     };
   }, []);
 
+  // The strip wraps to a second row on very narrow screens, so its real height replaces the --strip-h estimate
+  // (the dropdown pins to it, as do the anchor scroll offsets)
+  useLayoutEffect(() => {
+    const strip = header.current?.querySelector<HTMLElement>('.navbar');
+    if (!strip) return;
+    const root = document.documentElement;
+    const measure = () => root.style.setProperty('--strip-h', `${strip.offsetHeight}px`);
+    measure();
+    const resize = new ResizeObserver(measure);
+    resize.observe(strip);
+    return () => {
+      resize.disconnect();
+      root.style.removeProperty('--strip-h');
+    };
+  }, []);
+
   // Escape always closes the menu. Where it's a dropdown (narrow), a click elsewhere dismisses it too;
   // on widescreen it acts like a sidebar and stays open until the button is pressed again.
   useEffect(() => {
@@ -103,6 +119,7 @@ export function Shell({ path, hero = false, sections = [], back, children }: She
         onMenuClose={() => (menuOpen.value = false)}
       />
     </div>
+    <SectionMenu items={sections} active={active.value} menuOpen={menuOpen.value} onMenuClose={() => (menuOpen.value = false)} />
     <Container>
       <div class="layout">
         {sections.length > 0 && (

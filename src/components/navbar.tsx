@@ -57,12 +57,19 @@ export function Navbar({ path, back, items, active, menuOpen, onMenuToggle, onMe
         </div>
       </Container>
     </nav>
-    {items.length > 0 && (
-      <div id="sectionMenu" class="sectionMenu" hidden={!menuOpen}>
-        <Container>
-          <SectionLinks items={items} active={active} onNavigate={onMenuClose} />
-        </Container>
-      </div>
-    )}
   </>;
+}
+
+/**
+ * Narrow-screen dropdown of the page's sections. It's rendered after the header rather than inside it: the header
+ * blurs what's behind it once stuck, which would make it the backdrop root and stop a nested blur from reaching the page.
+ * Always mounted so opening can animate; closed, it's visibility:hidden so it's out of the tab order and the a11y tree.
+ */
+export function SectionMenu({ items, active, menuOpen, onMenuClose }: Pick<NavbarProps, 'items' | 'active' | 'menuOpen' | 'onMenuClose'>): JSX.Element | null {
+  if (items.length === 0) return null;
+  return <div class="sectionMenuRail">
+    <div id="sectionMenu" class={`sectionMenu${menuOpen ? ' open' : ''}`}>
+      <SectionLinks items={items} active={active} onNavigate={onMenuClose} />
+    </div>
+  </div>;
 }

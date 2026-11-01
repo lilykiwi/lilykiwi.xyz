@@ -221,18 +221,56 @@ a {
   }
 }
 
-.sectionMenu {
+/* zero-height sticky rail directly under the strip (in flow it sits at the header's bottom edge, and it pins at the
+   strip height once the header sticks), kept below the header so the card slides out from beneath it */
+.sectionMenuRail {
   display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  padding: 0.75rem 0;
-  background: var(--bg-tertiary);
-  border-bottom: var(--border-width) solid var(--border);
+  position: sticky;
+  top: var(--strip-h);
+  z-index: 9;
+  height: 0;
+}
 
-  &[hidden] {
-    display: none;
+/* floating card with the header's blur; the clip-path reveals it downwards out of the strip */
+.sectionMenu {
+  position: absolute;
+  top: 0;
+  left: 0.75rem;
+  right: 0.75rem;
+  max-width: 24rem;
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  /* one soft wash instead of the header's four, over a darker, more opaque base */
+  background-color: color-mix(in oklab, var(--bg-tertiary) 85%, transparent);
+  background-image: radial-gradient(
+    ellipse 90% 120% at 0% 0%,
+    color-mix(in oklab, var(--primary) 16%, transparent),
+    transparent
+  );
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px color-mix(in oklab, black 40%, transparent);
+  backdrop-filter: blur(16px);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-0.75rem);
+  clip-path: inset(0 0 100% 0 round var(--radius));
+  transition:
+    opacity 0.2s ease,
+    transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    clip-path 0.25s ease,
+    visibility 0.25s;
+
+  &.open {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0 round var(--radius));
+
+    .sectionLinks a {
+      animation: descend 0.3s ease backwards;
+      animation-delay: calc(var(--i, 0) * 40ms + 60ms);
+    }
   }
 }
 
@@ -729,7 +767,9 @@ time {
     scroll-behavior: auto;
   }
   .navbar-brand,
-  .repoCards a {
+  .repoCards a,
+  .sectionMenu,
+  .sectionMenu.open .sectionLinks a {
     animation: none;
     transition: none;
   }
@@ -750,7 +790,7 @@ time {
   .navbar .menuButton {
     display: inline-flex;
   }
-  .sectionMenu:not([hidden]) {
+  .sectionMenuRail {
     display: block;
   }
 }

@@ -79,11 +79,12 @@ export function SectionLinks({ items, active, onNavigate }: {
   onNavigate?: () => void;
 }): JSX.Element {
   return <nav class="sectionLinks" aria-label="Sections">
-    {items.map((item) => {
+    {items.map((item, i) => {
       const Icon = icons[item.icon];
       return (
         <a
           key={item.id}
+          style={{ '--i': i }}
           href={`#${item.id}`}
           aria-current={active === item.id ? 'location' : undefined}
           onClick={onNavigate}
