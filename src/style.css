@@ -44,6 +44,8 @@
   /* the gradients are laid out for the tallest header (hero + strip) and pinned to its bottom edge, so the bare strip
      on subpages shows the bottom of that picture, cropped, rather than all of it squashed */
   --header-bg-h: 33rem;
+  /* the darker base shared by cards and the section popup */
+  --card-bg-color: color-mix(in oklab, var(--bg-tertiary) 85%, transparent);
 }
 
 html {
@@ -245,8 +247,7 @@ a {
   max-width: 24rem;
   margin-top: 0.5rem;
   padding: 0.6rem 0.75rem;
-  /* one soft wash instead of the header's four, over a darker, more opaque base */
-  background-color: color-mix(in oklab, var(--bg-tertiary) 85%, transparent);
+  background-color: var(--card-bg-color);
   background-image: radial-gradient(
     ellipse 90% 120% at 0% 0%,
     color-mix(in oklab, var(--primary) 16%, transparent),
@@ -254,7 +255,6 @@ a {
   );
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 12px 32px color-mix(in oklab, black 40%, transparent);
   backdrop-filter: blur(16px);
   visibility: hidden;
   opacity: 0;
@@ -417,6 +417,12 @@ time {
   opacity: 0.6;
 }
 
+/* cards sit on a darker base than the page (the popup shares it, and adds its own glow and blur since it overlaps content) */
+.albumCard,
+.repoCards a {
+  background-color: var(--card-bg-color);
+}
+
 /* blog */
 .postList {
   list-style: none;
@@ -487,7 +493,6 @@ time {
   display: grid;
   gap: 0.25rem;
   padding: 0.5rem;
-  background: var(--bg-secondary);
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   color: var(--text-strong);
@@ -550,7 +555,6 @@ time {
     width: 100%;
     margin: 0 0 1rem;
     padding: 0.5rem;
-    background: var(--bg-secondary);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius);
     text-decoration: none;
