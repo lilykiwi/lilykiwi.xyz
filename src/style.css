@@ -255,7 +255,8 @@ a {
   display: none;
 }
 
-/* floating card with the header's blur; the clip-path reveals it downwards out of the strip */
+/* Floating card with a frosted backdrop; the clip-path reveals it downwards out of the strip. (Firefox gets an opaque
+   one instead, see the @supports block after this rule.) */
 .sectionMenu {
   position: absolute;
   top: 0;
@@ -272,6 +273,7 @@ a {
   );
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   visibility: hidden;
   opacity: 0;
@@ -293,6 +295,19 @@ a {
       animation: descend 0.3s ease backwards;
       animation-delay: calc(var(--i, 0) * 40ms + 60ms);
     }
+  }
+}
+
+/* Firefox doesn't dither gradients. An element with a backdrop-filter makes it draw everything behind it (the page
+   gradient under the translucent hero) through an offscreen surface, and there the gradient steps into visible bands
+   the moment the popup exists. So the popup there is fully opaque with no filter, which keeps the hero untouched.
+   (-moz-appearance is only understood by Firefox. The lit top edge stands in for the glassy look.) */
+@supports (-moz-appearance: none) {
+  .sectionMenu {
+    background-color: var(--bg-tertiary);
+    box-shadow: inset 0 1px 0 color-mix(in oklab, white 8%, transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
