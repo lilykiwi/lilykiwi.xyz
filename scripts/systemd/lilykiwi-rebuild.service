@@ -1,0 +1,10 @@
+# set User and the path to rebuild.sh for your server; the user needs write access to /data
+[Unit]
+Description=rebuild and publish lilykiwi.xyz
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=CHANGE_ME
+ExecStart=/usr/bin/env bash /CHANGE/ME/lilykiwi.xyz/rebuild.sh

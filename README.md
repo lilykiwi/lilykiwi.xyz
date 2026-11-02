@@ -151,6 +151,8 @@ Then open the address it prints in **Chrome or Firefox** (it refuses to draw in 
 ```
 astro.config.mjs        Astro config (Preact integration, static output)
 deploy.sh               publishes dist/ as a new release on the server
+rebuild.sh              pulls, builds and runs deploy.sh (run by .github/workflows/deploy.yml and the daily timer)
+scripts/systemd/        the daily timer for rebuild.sh
 scripts/gen-icons.cjs   regenerates src/components/icons.tsx from @primer/octicons
 scripts/gen-title.cjs   regenerates the title pictures in public/ and src/components/titleImage.json (see "The title")
 public/                 the generated title pictures
@@ -179,6 +181,12 @@ src/
 ## Deploying
 
 On the server, run `bun run build`, then `bash deploy.sh`, which copies `dist/` into `/data/releases/<timestamp>` and points the `/data/www` symlink at it in one atomic step, keeping the last 5 releases. To roll back, re-point the symlink at an older release: `ln -sfn /data/releases/<timestamp> /data/www.tmp && mv -T /data/www.tmp /data/www`. The build output is plain static files, so any web server that serves a directory will do. Every page is a `<path>/index.html`, so URLs like `/blog/my-post/` work without any rewrite rules.
+
+`rebuild.sh` does all of that in one go (pull, install, build, deploy), and runs automatically on every push to `main` and once a day. A failed build stops before the deploy, so the live site stays as it was. To set it up:
+
+1. On the server, make an SSH key for the action with `ssh-keygen -t ed25519 -f deploy_key -N ''`, and add `deploy_key.pub` to `~/.ssh/authorized_keys`, limited to the one command: `command="bash /path/to/lilykiwi.xyz/rebuild.sh",restrict ssh-ed25519 AAAA...`
+2. In the GitHub repo's Actions secrets, set `DEPLOY_SSH_KEY` (the contents of `deploy_key`), `DEPLOY_TARGET` (`user@host`) and `DEPLOY_KNOWN_HOSTS` (the output of `ssh-keyscan host`, checked against the server's real fingerprint). Then delete `deploy_key` from the server.
+3. For the daily run, fill in the `CHANGE_ME` values in `scripts/systemd/lilykiwi-rebuild.service`, copy both files in that folder to `/etc/systemd/system/`, and run `sudo systemctl enable --now lilykiwi-rebuild.timer`.
 
 ## License
 
